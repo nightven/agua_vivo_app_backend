@@ -46,8 +46,24 @@ const login = async (req, res) => {
   if (!user) {
     throw httpError(401, "Email or password is wrong");
   }
+
+  const comparePasswords = await user.comparePassword(password);
+  if (!comparePasswords) {
+    throw httpError(401, "Email or password is wrong");
+  }
+
+  const payload = {
+    id: user._id,
+  };
+
+  const token = jwt.sign(payload, SECRET_KEY);
+
+  await findUserById(user._id, { token });
+
+  res.json({ token, user: { email, avatar: user.avatar } });
 };
 
 module.exports = {
   register: ctrlWrapper(register),
+  login: ctrlWrapper(login),
 };
