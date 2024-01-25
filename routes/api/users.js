@@ -3,8 +3,9 @@ const router = express.Router();
 const controllers = require("../../controllers/userControllers");
 const validateBody = require("../../decorators/validateBody");
 const { schemas } = require("../../schemas/usersSchemas");
-const { authenticate, upload } = require("../../middlewares");
+const { authenticate, upload, isValidId } = require("../../middlewares");
 
+//! Auth
 router.post(
   "/register",
   validateBody(schemas.registerSchema),
@@ -18,6 +19,16 @@ router.patch(
   authenticate,
   upload.single("avatar"),
   controllers.updateAvatar
+);
+
+//! UserInfo
+router.get("/:id", authenticate, isValidId, controllers.getInfo);
+router.patch(
+  "/:id",
+  authenticate,
+  isValidId,
+  validateBody(schemas.updateSchema),
+  controllers.updateInfo
 );
 
 module.exports = router;

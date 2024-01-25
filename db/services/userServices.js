@@ -25,10 +25,22 @@ const newAvatar = async (id, avatar) => {
   return newAvatar;
 };
 
+const findUserById = async (id) => {
+  const user = await User.findById(id);
+  return user;
+};
+
+const updateUserInfo = async (id, body, newInfo) => {
+  const userInfo = await User.findByIdAndUpdate(id, body, newInfo);
+  return userInfo;
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
   userCollection,
   updateUserById,
   newAvatar,
+  findUserById,
+  updateUserInfo
 };
