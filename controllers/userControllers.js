@@ -5,7 +5,7 @@ const { httpError, ctrlWrapper } = require("../helpers");
 const {
   findUserByEmail,
   userCollection,
-  findUserById,
+  updateUserById,
 } = require("../db/services/userServices");
 
 const { SECRET_KEY } = process.env;
@@ -31,7 +31,7 @@ const register = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY);
 
-  await findUserById(newUser._id, { token });
+  await updateUserById(newUser._id, { token });
 
   res.status(201).json({
     token,
@@ -58,7 +58,7 @@ const login = async (req, res) => {
 
   const token = jwt.sign(payload, SECRET_KEY);
 
-  await findUserById(user._id, { token });
+  await updateUserById(user._id, { token });
 
   res.json({ token, user: { email, avatar: user.avatar } });
 };
@@ -68,8 +68,16 @@ const current = (req, res) => {
   res.json({ email, avatar });
 };
 
+const logout = async (req, res) => {
+  const { _id } = req.user;
+  updateUserById(_id, { token: "" });
+
+  res.sendStatus(204);
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   current: ctrlWrapper(current),
+  logout: ctrlWrapper(logout),
 };

@@ -15,9 +15,9 @@ const userCollection = (body, avatar) => {
   return user;
 };
 
-const findUserById = async (id, token) => {
+const updateUserById = async (id, token) => {
   const user = await User.findByIdAndUpdate(id, token);
   return user;
 };
 
-module.exports = { createUser, findUserByEmail, userCollection, findUserById };
+module.exports = { createUser, findUserByEmail, userCollection, updateUserById };
