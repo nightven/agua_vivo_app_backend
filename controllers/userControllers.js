@@ -29,7 +29,7 @@ const register = async (req, res) => {
     id: newUser._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "23h" });
+  const token = jwt.sign(payload, SECRET_KEY);
 
   await findUserById(newUser._id, { token });
 
@@ -63,7 +63,13 @@ const login = async (req, res) => {
   res.json({ token, user: { email, avatar: user.avatar } });
 };
 
+const current = (req, res) => {
+  const { email, avatar } = req.user;
+  res.json({ email, avatar });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
+  current: ctrlWrapper(current),
 };

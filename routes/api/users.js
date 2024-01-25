@@ -3,6 +3,7 @@ const router = express.Router();
 const controllers = require("../../controllers/userControllers");
 const validateBody = require("../../decorators/validateBody");
 const { schemas } = require("../../schemas/usersSchemas");
+const { authenticate } = require("../../middlewares");
 
 router.post(
   "/register",
@@ -10,7 +11,7 @@ router.post(
   controllers.register
 );
 router.post("/login", validateBody(schemas.loginSchema), controllers.login);
-router.get("/current");
-router.post("/logout");
+router.get("/current", authenticate, controllers.current);
+router.post("/logout", authenticate);
 
 module.exports = router;
