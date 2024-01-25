@@ -9,6 +9,7 @@ const {
   userCollection,
   updateUserById,
   newAvatar,
+  findUserById,
 } = require("../db/services/userServices");
 
 const { SECRET_KEY } = process.env;
@@ -99,10 +100,22 @@ const updateAvatar = async (req, res) => {
   res.json({ avatar });
 };
 
+const getInfo = async (req, res) => {
+  const { id } = req.params;
+  const user = await findUserById(id);
+
+  if (!user) {
+    throw httpError(404);
+  }
+
+  res.json({ user: { email: user.email, gender: user.gender, avatar: user.avatar } });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   current: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
-  updateAvatar: ctrlWrapper(updateAvatar)
+  updateAvatar: ctrlWrapper(updateAvatar),
+  getInfo: ctrlWrapper(getInfo),
 };

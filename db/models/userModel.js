@@ -13,6 +13,11 @@ const userSchemas = new Schema(
       required: [true, "Email is required"],
       unique: true,
     },
+    gender: {
+      type: String,
+      enum: ["Woman", "Man"],
+      default: "Woman",
+    },
     avatar: {
       type: String,
     },
@@ -28,9 +33,9 @@ userSchemas.methods.hashPassword = async function () {
   this.password = await bcrypt.hash(this.password, 10);
 };
 
-userSchemas.methods.comparePassword = async function(password){
-  return await bcrypt.compare(password, this.password)
-}
+userSchemas.methods.comparePassword = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
 
 const User = model("user", userSchemas);
 

@@ -25,10 +25,16 @@ const newAvatar = async (id, avatar) => {
   return newAvatar;
 };
 
+const findUserById = async (id) => {
+  const user = await User.findById(id);
+  return user;
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
   userCollection,
   updateUserById,
   newAvatar,
+  findUserById,
 };

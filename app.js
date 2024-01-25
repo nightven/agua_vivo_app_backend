@@ -15,6 +15,7 @@ const formatsLogger = app.get("env") === "development" ? "dev" : "short";
 app.use(logger(formatsLogger));
 app.use(express.json());
 app.use(cors());
+app.use(express.static("public"));
 
 app.use("/users", usersRouter);
 app.use("/api/water", waterRouter);
