@@ -1,11 +1,14 @@
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
+const path = require("path");
+const fs = require("fs/promises");
 
 const { httpError, ctrlWrapper } = require("../helpers");
 const {
   findUserByEmail,
   userCollection,
   updateUserById,
+  newAvatar,
 } = require("../db/services/userServices");
 
 const { SECRET_KEY } = process.env;
@@ -75,9 +78,31 @@ const logout = async (req, res) => {
   res.sendStatus(204);
 };
 
+const pathAvatar = path.join(__dirname, "../public/avatars");
+
+const updateAvatar = async (req, res) => {
+  const { _id } = req.user;
+  if (!req.file) {
+    throw httpError(404, "no file attached");
+  }
+
+  const { path: tempUpload, originalname } = req.file;
+  const fileName = `${_id}${originalname}`;
+
+  const resultName = path.join(pathAvatar, fileName);
+  await fs.rename(tempUpload, resultName);
+
+  const avatar = path.join("avatars", fileName);
+
+  await newAvatar(_id, { avatar });
+
+  res.json({ avatar });
+};
+
 module.exports = {
   register: ctrlWrapper(register),
   login: ctrlWrapper(login),
   current: ctrlWrapper(current),
   logout: ctrlWrapper(logout),
+  updateAvatar: ctrlWrapper(updateAvatar)
 };
