@@ -30,6 +30,11 @@ const findUserById = async (id) => {
   return user;
 };
 
+const updateUserInfo = async (id, body, newInfo) => {
+  const userInfo = await User.findByIdAndUpdate(id, body, newInfo);
+  return userInfo;
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
@@ -37,4 +42,5 @@ module.exports = {
   updateUserById,
   newAvatar,
   findUserById,
+  updateUserInfo
 };

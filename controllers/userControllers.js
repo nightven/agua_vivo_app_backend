@@ -10,6 +10,7 @@ const {
   updateUserById,
   newAvatar,
   findUserById,
+  updateUserInfo,
 } = require("../db/services/userServices");
 
 const { SECRET_KEY } = process.env;
@@ -108,7 +109,22 @@ const getInfo = async (req, res) => {
     throw httpError(404);
   }
 
-  res.json({ user: { email: user.email, gender: user.gender, avatar: user.avatar } });
+  res.json({
+    user: { email: user.email, gender: user.gender, avatar: user.avatar },
+  });
+};
+
+const updateInfo = async (req, res) => {
+  const { id } = req.params;
+  const user = await updateUserInfo(id, req.body, { new: true });
+
+  if (!user) {
+    throw httpError(404);
+  }
+
+  res.json({
+    user: { email: user.email, gender: user.gender, avatar: user.avatar },
+  });
 };
 
 module.exports = {
@@ -118,4 +134,5 @@ module.exports = {
   logout: ctrlWrapper(logout),
   updateAvatar: ctrlWrapper(updateAvatar),
   getInfo: ctrlWrapper(getInfo),
+  updateInfo: ctrlWrapper(updateInfo),
 };

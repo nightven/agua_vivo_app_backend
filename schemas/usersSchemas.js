@@ -28,9 +28,18 @@ const loginSchema = Joi.object({
     .message({ "any.required": "missing required password field" }),
 });
 
+const updateSchema = Joi.object({
+  gender: Joi.string().valid("Woman", "Man"),
+  password: Joi.string()
+    .min(8)
+    .max(64)
+    .message({ "any.required": "missing required password field" }),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
+  updateSchema,
 };
 
 module.exports = { schemas };

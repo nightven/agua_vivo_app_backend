@@ -23,5 +23,12 @@ router.patch(
 
 //! UserInfo
 router.get("/:id", authenticate, isValidId, controllers.getInfo);
+router.patch(
+  "/:id",
+  authenticate,
+  isValidId,
+  validateBody(schemas.updateSchema),
+  controllers.updateInfo
+);
 
 module.exports = router;
