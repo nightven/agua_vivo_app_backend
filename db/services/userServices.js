@@ -20,4 +20,15 @@ const updateUserById = async (id, token) => {
   return user;
 };
 
-module.exports = { createUser, findUserByEmail, userCollection, updateUserById };
+const newAvatar = async (id, avatar) => {
+  const newAvatar = await User.findByIdAndUpdate(id, avatar);
+  return newAvatar;
+};
+
+module.exports = {
+  createUser,
+  findUserByEmail,
+  userCollection,
+  updateUserById,
+  newAvatar,
+};
