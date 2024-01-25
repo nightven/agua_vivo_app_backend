@@ -2,10 +2,10 @@ const { addAmountWater } = require("../db/services/waterServices");
 const { ctrlWrapper } = require("../helpers");
 
 const addWater = async (req, res) => {
-  const waterAmount = req.waterVolume;
+  const {waterVolume} = req.body;
   console.log(req.body)
 
-  if (waterAmount > 5000) {
+  if (waterVolume > 5000) {
     res.status(400).json({ message: "waterVolume cannot exceed 5000" });
   }
 
