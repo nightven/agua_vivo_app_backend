@@ -4,23 +4,19 @@ const handleMongooseError = require("../../helpers/handleMongooseError");
 
 const waterSchema = new Schema(
   {
-    waterRate: {
-      type: Number,
-      required: [true, "waterRate is required"],
-    },
     waterVolume: {
       type: Number,
       required: [true, "waterVolume is required"],
     },
     date: {
-      type: Number,
+      type: Date,
       required: [true, "date is required"],
     },
-    owner: {
-      type: Schema.Types.ObjectId,
-      ref: "user",
-      required: true,
-    },
+    // owner: {
+    //   type: Schema.Types.ObjectId,
+    //   ref: "user",
+    //   required: true,
+    // },
   },
   { versionKey: false, timestamps: false }
 );

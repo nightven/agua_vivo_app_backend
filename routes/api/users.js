@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const controllers = require("../../controllers/userControllers");
 const validateBody = require("../../decorators/validateBody");
-const { schemas } = require("../../schemas/usersShemas");
+const { schemas } = require("../../schemas/usersSchemas");
 
 router.post(
   "/register",
