@@ -1,39 +1,42 @@
-const Water = require('../models/waterModel')
-
+const Water = require("../models/waterModel");
 
 const addAmountWater = async (body) => {
-    const newAmount = await Water.create(body);
-    return newAmount;
- }
+    const date = new Date();
+    const day = date.getDate();
+  const newAmount = await Water.create({ ...body, date, day });
+  return newAmount;
+};
 
-const updateAmountWater = async ({ userId, day }) => {
+const updateAmountWater = async ({ owner, waterId, waterVolume, day }) => {
+  const date = new Date();
 
-    const updatedAmountWater = await Water.findOne({ _id: userId, day })
+  const updatedWater = await Water.findOneAndUpdate(
+    { _id: waterId, owner },
+    { waterVolume, date, day, owner },
+    { new: true }
+  );
 
-    return updatedAmountWater;
- }
+  return updatedWater;
+};
 
-const deleteAmountWater = async ({ userId }) => { 
-    
-    const deleteAmount = await Water.findByIdAndDelete(userId);
+const deleteAmountWater = async ({ waterId, owner }) => {
+  const deletedAmount = await Water.findByIdAndDelete({ _id: waterId, owner });
 
-    return deleteAmount;
-}
+  return deletedAmount;
+};
 
-const getAmountWaterDaily = async ({ userId, day }) => {
+const getAmountWaterDaily = async ({ owner, day }) => {
+  const amountDaily = await Water.find({ owner, day });
 
-    const amountDaily = await Water.find({ _id: userId, day });
-
-    return amountDaily;
- }
+  return amountDaily;
+};
 
 const getAmountWaterMonthly = async ({ userId, month }) => {
+  const amountMonthly = await Water.find({ _id: userId, month });
 
-    const amountMonthly = await Water.find({ _id: userId, month });
+  return amountMonthly;
+};
 
-    return amountMonthly;
-}
- 
 module.exports = {
   addAmountWater,
   updateAmountWater,
