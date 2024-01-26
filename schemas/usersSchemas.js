@@ -30,16 +30,25 @@ const loginSchema = Joi.object({
 
 const updateSchema = Joi.object({
   gender: Joi.string().valid("Woman", "Man"),
-  password: Joi.string()
-    .min(8)
-    .max(64)
-    .message({ "any.required": "missing required password field" }),
+  password: Joi.string().min(8).max(64),
+});
+
+const waterRateSchema = Joi.object({
+  gender: Joi.string()
+    .valid("Woman", "Man"),
+  weight: Joi.number()
+    .required()
+    .messages({ "any.required": "missing required weight field" }),
+  sportTime: Joi.number()
+    .required()
+    .messages({ "any.required": "missing required sportTime field" }),
 });
 
 const schemas = {
   registerSchema,
   loginSchema,
   updateSchema,
+  waterRateSchema,
 };
 
 module.exports = { schemas };
