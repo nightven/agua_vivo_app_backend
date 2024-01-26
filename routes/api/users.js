@@ -30,5 +30,11 @@ router.patch(
   validateBody(schemas.updateSchema),
   controllers.updateInfo
 );
+router.put(
+  "/water-rate",
+  authenticate,
+  validateBody(schemas.waterRateSchema),
+  controllers.dailyNorm
+);
 
 module.exports = router;
