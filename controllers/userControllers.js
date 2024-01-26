@@ -131,10 +131,12 @@ const updateInfo = async (req, res) => {
 };
 
 const dailyNorm = async (req, res) => {
-  const { id } = req.params;
+    // console.log(req.user)
+  const { _id} = req.user;
   const { gender, weight, sportTime } = req.body;
 
-  const user = await findUserById(id);
+
+  const user = await findUserById(_id);
   const waterNorm = amountNormaLitres(gender, weight, sportTime);
 
   if (!user) {

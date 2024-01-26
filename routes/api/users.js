@@ -31,9 +31,8 @@ router.patch(
   controllers.updateInfo
 );
 router.put(
-  "/water-rate/:id",
+  "/water-rate",
   authenticate,
-  isValidId,
   validateBody(schemas.waterRateSchema),
   controllers.dailyNorm
 );
