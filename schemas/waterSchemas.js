@@ -6,12 +6,26 @@ const waterSchemas = Joi.object({
     .max(15000)
     .required()
     .messages({ "any.required": "missing required waterVolume field" }),
-  date: Joi.date()
+});
+
+const updateWaterSchemas = Joi.object({
+  waterVolume: Joi.number()
+    .min(1)
+    .max(15000)
     .required()
-    .messages({ "any.required": "missing required date field" }),
+    .messages({ "any.required": "missing required waterVolume field" }),
+  day: Joi.number()
+    .min(1)
+    .max(31)
+    .required()
+    .messages({ "any.required": "missing required day field" }),
+  id: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required id field" }),
 });
 
 const schemas = {
   waterSchemas,
+  updateWaterSchemas,
 };
 module.exports = { schemas };

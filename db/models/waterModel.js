@@ -12,11 +12,15 @@ const waterSchema = new Schema(
       type: Date,
       required: [true, "date is required"],
     },
-    // owner: {
-    //   type: Schema.Types.ObjectId,
-    //   ref: "user",
-    //   required: true,
-    // },
+    day: {
+      type: Number,
+      required: [true, "day is required"],
+    },
+    owner: {
+      type: Schema.Types.ObjectId,
+      ref: "user",
+      required: true,
+    },
   },
   { versionKey: false, timestamps: false }
 );
