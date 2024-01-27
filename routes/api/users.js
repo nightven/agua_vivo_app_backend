@@ -22,9 +22,9 @@ router.patch(
 );
 
 //! UserInfo
-router.get("/:id", authenticate, isValidId, controllers.getInfo);
+router.get("/info/:id", authenticate, isValidId, controllers.getInfo);
 router.patch(
-  "/:id",
+  "/update-user/:id",
   authenticate,
   isValidId,
   validateBody(schemas.updateSchema),
@@ -36,5 +36,9 @@ router.put(
   validateBody(schemas.waterRateSchema),
   controllers.dailyNorm
 );
+
+//! Google Auth
+router.get("/google", controllers.googleAuth);
+router.get("/google-redirect", controllers.googleRedirect);
 
 module.exports = router;
