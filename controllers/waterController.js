@@ -1,13 +1,20 @@
 const {
+  getDailyNorm,
   addAmountWater,
   updateAmountWater,
   deleteAmountWater,
   getAmountWaterDaily,
+  getAmountMonthlyFromDb,
 } = require("../db/services/waterServices");
-const { ctrlWrapper, httpError, amountDailyNorm } = require("../helpers");
+const {
+  ctrlWrapper,
+  httpError,
+  amountDailyNorm,
+  amountMonthly,
+} = require("../helpers");
 
 const addWater = async (req, res) => {
-  const { waterVolume, day } = req.body;
+  const { waterVolume } = req.body;
   const { _id: owner } = req.user;
 
   if (waterVolume > 5000) {
@@ -23,30 +30,28 @@ const addWater = async (req, res) => {
   res.status(200).json({
     id: amountWater.id,
     waterVolume: amountWater.waterVolume,
-    day: amountWater.day,
     date: amountWater.date,
   });
 };
 
 const updateWater = async (req, res) => {
-  const { id, waterVolume, day } = req.body;
+  const { id, waterVolume, date } = req.body;
   const { _id: owner } = req.user;
 
   const updatedWater = await updateAmountWater({
     owner,
     waterId: id,
     waterVolume,
-    day,
+    date,
   });
 
   if (!updatedWater) {
-    throw httpError(500);
+    throw httpError(404);
   }
 
   res.json({
     id: updatedWater.id,
     waterVolume: updatedWater.waterVolume,
-    day: updatedWater.day,
     date: updatedWater.date,
   });
 };
@@ -68,15 +73,37 @@ const getAmountDaily = async (req, res) => {
   const { _id: owner } = req.user;
   const { day } = req.body;
 
-  const amount = await getAmountWaterDaily({ owner, day });
-
-  if (!amount) {
-    throw httpError(404);
+  if (typeof day !== "number") {
+    throw httpError(400, "Invalid type of day, most be number");
   }
 
-  const percentage = amountDailyNorm(amount);
+  const amountOfDay = await getAmountWaterDaily({ owner, day });
 
-  res.json({ percentage, dailyNorm: 2000, countofday: amount });
+  if (!amountOfDay) {
+    throw httpError(404);
+  }
+  const dailyNorm = await getDailyNorm(owner);
+
+  const percentage = amountDailyNorm({ amountOfDay, dailyNorm });
+
+  res.json({ percentage, countofday: amountOfDay });
+};
+
+const getAmountMonthly = async (req, res) => {
+  const { _id: owner } = req.user;
+  const { month } = req.body;
+
+  const amountOfMonth = await getAmountMonthlyFromDb({ owner, month });
+  let dailyNorm = await getDailyNorm(owner);
+
+  dailyNorm = dailyNorm === "" ? 1800 : dailyNorm;
+
+  if (!amountMonthly) {
+    throw httpError(404);
+  }
+  const formattedAmount = amountMonthly(amountOfMonth, dailyNorm);
+
+  res.json({ month: formattedAmount });
 };
 
 module.exports = {
@@ -84,4 +111,5 @@ module.exports = {
   updateWater: ctrlWrapper(updateWater),
   deleteWater: ctrlWrapper(deleteWater),
   getAmountDaily: ctrlWrapper(getAmountDaily),
+  getAmountMonthly: ctrlWrapper(getAmountMonthly),
 };
