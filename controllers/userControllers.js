@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const axios = require("axios");
 const queryString = require("querystring");
+
 const {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -10,6 +11,7 @@ const {
   SECRET_KEY,
   BACK_END,
 } = process.env;
+
 
 const { httpError, ctrlWrapper } = require("../helpers");
 const {
