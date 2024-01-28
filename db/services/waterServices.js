@@ -44,8 +44,8 @@ const deleteAmountWater = async ({ waterId, owner }) => {
 };
 
 const getDailyNorm = async (owner) => {
-  const  user  = await User.findOne({ _id: owner });
-    
+  const user = await User.findOne({ _id: owner });
+
   return user.dailyNorma;
 };
 
