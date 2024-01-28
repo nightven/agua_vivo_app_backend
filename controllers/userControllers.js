@@ -4,7 +4,7 @@ const path = require("path");
 const fs = require("fs/promises");
 const axios = require("axios");
 const queryString = require("querystring");
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, PORT, FRONT_END, SECRET_KEY } =
+const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, PORT, SECRET_KEY } =
   process.env;
 
 const { httpError, ctrlWrapper, amountNormaLitres } = require("../helpers");
