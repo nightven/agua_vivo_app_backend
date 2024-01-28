@@ -1,18 +1,15 @@
 const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
-const path = require("path");
-const fs = require("fs/promises");
 const axios = require("axios");
 const queryString = require("querystring");
 const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, PORT, SECRET_KEY } =
   process.env;
 
-const { httpError, ctrlWrapper, amountNormaLitres } = require("../helpers");
+const { httpError, ctrlWrapper } = require("../helpers");
 const {
   findUserByEmail,
   userCollection,
   updateUserById,
-  newAvatar,
   findUserById,
   updateUserInfo,
 } = require("../db/services/userServices");
@@ -90,25 +87,20 @@ const logout = async (req, res) => {
   res.sendStatus(204);
 };
 
-const pathAvatar = path.join(__dirname, "../public/avatars");
-
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
-  if (!req.file) {
-    throw httpError(404, "no file attached");
+  const avatarURL = req.file.path;
+  const user = await findUserById(_id);
+  console.log(user);
+
+  if (!user) {
+    throw httpError(404);
   }
 
-  const { path: tempUpload, originalname } = req.file;
-  const fileName = `${_id}${originalname}`;
+  user.avatar = avatarURL;
+  user.save();
 
-  const resultName = path.join(pathAvatar, fileName);
-  await fs.rename(tempUpload, resultName);
-
-  const avatar = path.join("avatars", fileName);
-
-  await newAvatar(_id, { avatar });
-
-  res.json({ avatar });
+  res.json({ avatarURL });
 };
 
 const getInfo = async (req, res) => {
@@ -144,24 +136,19 @@ const updateInfo = async (req, res) => {
 
 const dailyNorm = async (req, res) => {
   const { _id } = req.user;
-  const { gender, weight, sportTime } = req.body;
+  const { dailyNorma } = req.body;
 
-  const user = await findUserById(_id);
-  const waterNorm = amountNormaLitres(gender, weight, sportTime);
+  if (dailyNorma > 15) {
+    throw httpError(400, "The daily rate can be a maximum of 15000 ml");
+  }
+
+  const user = await updateUserInfo(_id, req.body, { new: true });
 
   if (!user) {
     throw httpError(404);
   }
 
-  if (waterNorm > 15) {
-    throw httpError(400, "The daily rate can be a maximum of 15000 ml");
-  }
-
-  user.gender = gender;
-  user.dailyNorma = waterNorm;
-  await user.save();
-
-  res.json({ waterNorm });
+  res.json({ dailyNorma });
 };
 
 const googleAuth = async (req, res) => {

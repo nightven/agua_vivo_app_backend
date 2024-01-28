@@ -18,15 +18,9 @@ const userSchemas = new Schema(
       enum: ["Woman", "Man"],
       default: "Woman",
     },
-    weight: {
-      type: String,
-    },
-    sportTime: {
-      type: String,
-    },
     dailyNorma: {
-      type: String,
-      default: "",
+      type: Number,
+      default: 1.8,
     },
     avatar: {
       type: String,
