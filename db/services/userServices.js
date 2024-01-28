@@ -30,6 +30,11 @@ const updateUserInfo = async (id, body, newInfo) => {
   return userInfo;
 };
 
+const createGoogleUser = async (email, name) => {
+  const user = await User.create(email, name);
+  return user;
+};
+
 module.exports = {
   createUser,
   findUserByEmail,
@@ -37,4 +42,5 @@ module.exports = {
   updateUserById,
   findUserById,
   updateUserInfo,
+  createGoogleUser,
 };
