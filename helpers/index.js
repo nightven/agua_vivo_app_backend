@@ -4,6 +4,7 @@ const httpError = require("./httpError");
 const sendEmail = require("./sendEmail");
 const amountDailyNorm = require("./amountDailyNorm");
 const amountNormaLitres = require("./amountNormaLitres");
+const amountMonthly = require("./amountMonthly");
 
 module.exports = {
   ctrlWrapper,
@@ -12,4 +13,5 @@ module.exports = {
   sendEmail,
   amountDailyNorm,
   amountNormaLitres,
+  amountMonthly,
 };
