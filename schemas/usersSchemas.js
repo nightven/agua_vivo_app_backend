@@ -29,19 +29,16 @@ const loginSchema = Joi.object({
 });
 
 const updateSchema = Joi.object({
+  name: Joi.string(),
   gender: Joi.string().valid("Woman", "Man"),
   password: Joi.string().min(8).max(64),
 });
 
 const waterRateSchema = Joi.object({
-  gender: Joi.string()
-    .valid("Woman", "Man"),
-  weight: Joi.number()
+  dailyNorma: Joi.number()
     .required()
-    .messages({ "any.required": "missing required weight field" }),
-  sportTime: Joi.number()
-    .required()
-    .messages({ "any.required": "missing required sportTime field" }),
+    .max(15)
+    .message({ "any.required": "missing required dailyNorma field" }),
 });
 
 const schemas = {

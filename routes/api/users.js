@@ -30,7 +30,7 @@ router.patch(
   validateBody(schemas.updateSchema),
   controllers.updateInfo
 );
-router.put(
+router.patch(
   "/water-rate",
   authenticate,
   validateBody(schemas.waterRateSchema),

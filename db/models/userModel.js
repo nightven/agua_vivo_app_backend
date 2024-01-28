@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 
 const userSchemas = new Schema(
   {
+    name: {
+      type: String,
+      default: "",
+    },
     password: {
       type: String,
       required: [true, "Set password for user"],
@@ -20,7 +24,7 @@ const userSchemas = new Schema(
     },
     dailyNorma: {
       type: Number,
-      default: 1.8,
+      default: 2,
     },
     avatar: {
       type: String,
