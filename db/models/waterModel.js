@@ -12,10 +12,16 @@ const waterSchema = new Schema(
       type: Date,
       required: [true, "date is required"],
     },
+    month: {
+      type: Number,
+    },
     day: {
       type: Number,
-      required: [true, "day is required"],
     },
+    time: {
+      type: String,
+    },
+
     owner: {
       type: Schema.Types.ObjectId,
       ref: "user",
