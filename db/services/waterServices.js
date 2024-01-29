@@ -1,27 +1,33 @@
 const User = require("../models/userModel");
 const Water = require("../models/waterModel");
 
-const addAmountWater = async (body) => {
+const addAmountWater = async (body, dailyNorma, owner) => {
   const date = new Date();
-  const month = date.getMonth() + 1;
-  const day = date.getDate();
-  let hours = date.getHours();
-  let minutes = date.getMinutes();
-  let ampm = hours >= 12 ? "PM" : "AM";
-  hours = hours % 12;
-  // Якщо години = 0, переведемо на 12
-  hours = hours ? hours : 12;
-  // Додаємо нуль перед хвилинами, якщо вони менше 10
-  minutes = minutes < 10 ? "0" + minutes : minutes;
 
-  const time = hours + ":" + minutes + " " + ampm;
+  const waterList = await Water.findOne({
+    date: {
+      $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+    },
+    owner,
+  });
+  console.log(waterList);
+  if (waterList) {
+    return Water.findByIdAndUpdate(
+      waterList._id,
+      {
+        $inc: { totalVolume: body.waterVolume },
+        $push: { entries: body },
+      },
+      { new: true }
+    );
+  }
 
   const newAmount = await Water.create({
-    ...body,
     date,
-    month,
-    day,
-    time,
+    dailyNorma,
+    entries: [body],
+    totalVolume: body.waterVolume,
+    owner,
   });
 
   return newAmount;

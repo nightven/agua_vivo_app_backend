@@ -6,6 +6,9 @@ const waterSchemas = Joi.object({
     .max(15000)
     .required()
     .messages({ "any.required": "missing required waterVolume field" }),
+  time: Joi.string()
+    .required()
+    .messages({ "any.required": "missing required date field" }),
 });
 
 const updateWaterSchemas = Joi.object({

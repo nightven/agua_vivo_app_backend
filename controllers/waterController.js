@@ -1,3 +1,4 @@
+const { findUserById } = require("../db/services/userServices");
 const {
   getDailyNorm,
   addAmountWater,
@@ -16,12 +17,13 @@ const {
 const addWater = async (req, res) => {
   const { waterVolume } = req.body;
   const { _id: owner } = req.user;
+  const { dailyNorma } = await findUserById(owner);
 
   if (waterVolume > 5000) {
     res.status(400).json({ message: "waterVolume cannot exceed 5000" });
   }
 
-  const amountWater = await addAmountWater({ waterVolume, owner });
+  const amountWater = await addAmountWater(req.body, dailyNorma, owner);
 
   if (!amountWater) {
     throw httpError(404);
