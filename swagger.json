@@ -294,16 +294,26 @@
             "required": true,
             "schema": { "type": "string" },
             "description": "Bearer token"
-          },
-          {
-            "name": "file",
-            "in": "formData",
-            "description": "File to upload",
-            "required": true,
-            "type": "file"
           }
         ],
         "security": [{ "Bearer": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "avatar": {
+                    "type": "string",
+                    "format": "binary"
+                  }
+                },
+                "required": ["avatar"]
+              }
+            }
+          }
+        },
         "responses": {
           "200": {
             "description": "Successful operation",
