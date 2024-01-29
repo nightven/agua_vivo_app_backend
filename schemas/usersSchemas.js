@@ -41,11 +41,19 @@ const waterRateSchema = Joi.object({
     .message({ "any.required": "missing required dailyNorma field" }),
 });
 
+const emailSchema = Joi.object({
+  email: Joi.string()
+    .email()
+    .required()
+    .messages({ "any.required": "missing required email field" }),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
   updateSchema,
   waterRateSchema,
+  emailSchema
 };
 
 module.exports = { schemas };

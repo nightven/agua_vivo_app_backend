@@ -11,7 +11,7 @@ const {
   BACK_END,
 } = process.env;
 
-const { httpError, ctrlWrapper } = require("../helpers");
+const { httpError, ctrlWrapper, sendEmail } = require("../helpers");
 const {
   findUserByEmail,
   userCollection,
@@ -112,8 +112,8 @@ const updateAvatar = async (req, res) => {
 };
 
 const getInfo = async (req, res) => {
-  const { id } = req.params;
-  const user = await findUserById(id);
+  const { _id } = req.user;
+  const user = await findUserById(_id);
 
   if (!user) {
     throw httpError(404);
@@ -131,15 +131,26 @@ const getInfo = async (req, res) => {
 };
 
 const updateInfo = async (req, res) => {
-  const { id } = req.params;
-  const user = await updateUserInfo(id, req.body, { new: true });
+  const { _id } = req.user;
+  const { password } = req.body;
+  const user = await updateUserInfo(_id, req.body, { new: true });
 
   if (!user) {
     throw httpError(404);
   }
 
+  if (password) {
+    await user.hashPassword();
+    user.save();
+  }
+
   res.json({
-    user: { email: user.email, gender: user.gender, avatar: user.avatar },
+    user: {
+      name: user.name,
+      email: user.email,
+      gender: user.gender,
+      avatar: user.avatar,
+    },
   });
 };
 
@@ -158,6 +169,33 @@ const dailyNorm = async (req, res) => {
   }
 
   res.json({ dailyNorma });
+};
+
+const resetPassword = async (req, res) => {
+  const { email } = req.body;
+  const user = await findUserByEmail({ email });
+
+  if (!user) {
+    throw httpError(404);
+  }
+  if (user.verify) {
+    throw httpError(400, "Verification has already been passed");
+  }
+
+  // Майбутня форма для ресету пароля з фронту
+  const resetLink = `http://localhost:8000/users/verify/${user.token}`;
+
+  const resetEmail = {
+    to: email,
+    subject: "Password Reset",
+    html: `<p>Click on the following link to reset your password: </p><a href="${resetLink}">${resetLink}</a>`,
+  };
+
+  await sendEmail(resetEmail);
+
+  res.json({
+    message: "Reset email sent",
+  });
 };
 
 const googleAuth = async (req, res) => {
@@ -229,4 +267,5 @@ module.exports = {
   dailyNorm: ctrlWrapper(dailyNorm),
   googleAuth: ctrlWrapper(googleAuth),
   googleRedirect: ctrlWrapper(googleRedirect),
+  resetPassword: ctrlWrapper(resetPassword),
 };

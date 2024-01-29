@@ -29,6 +29,10 @@ const userSchemas = new Schema(
     avatar: {
       type: String,
     },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
     token: {
       type: String,
       default: "",

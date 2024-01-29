@@ -22,11 +22,10 @@ router.patch(
 );
 
 //! UserInfo
-router.get("/info/:id", authenticate, isValidId, controllers.getInfo);
+router.get("/info", authenticate, controllers.getInfo);
 router.patch(
-  "/update-user/:id",
+  "/update-user",
   authenticate,
-  isValidId,
   validateBody(schemas.updateSchema),
   controllers.updateInfo
 );
@@ -40,5 +39,12 @@ router.patch(
 //! Google Auth
 router.get("/google", controllers.googleAuth);
 router.get("/google-redirect", controllers.googleRedirect);
+
+//! Forgot Password
+router.post(
+  "/reset-password",
+  validateBody(schemas.emailSchema),
+  controllers.resetPassword
+);
 
 module.exports = router;
