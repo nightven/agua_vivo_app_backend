@@ -22,17 +22,16 @@ router.put(
 router.delete("/delete/:id", authenticate, isValidId, controllers.deleteWater);
 
 router.get(
-  "/amountdaily",
+  "/today",
   authenticate,
-  validateBody(schemas.dailySchemas),
-  controllers.getAmountDaily
+  controllers.getToDay
 );
 
 router.get(
-  "/amoutmonth",
+  "/month",
   authenticate,
   validateBody(schemas.monthlySchemas),
-  controllers.getAmountMonthly
+  controllers.getMonthly
 );
 
 module.exports = router;

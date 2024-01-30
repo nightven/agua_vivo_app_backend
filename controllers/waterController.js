@@ -1,27 +1,23 @@
+const { findUserById } = require("../db/services/userServices");
 const {
-  getDailyNorm,
   addAmountWater,
   updateAmountWater,
   deleteAmountWater,
-  getAmountWaterDaily,
-  getAmountMonthlyFromDb,
+  getEntriesDaily,
+  getEntriesMonthly,
 } = require("../db/services/waterServices");
-const {
-  ctrlWrapper,
-  httpError,
-  amountDailyNorm,
-  amountMonthly,
-} = require("../helpers");
+const { ctrlWrapper, httpError, amountMonthly } = require("../helpers");
 
 const addWater = async (req, res) => {
   const { waterVolume } = req.body;
   const { _id: owner } = req.user;
+  const { dailyNorma } = await findUserById(owner);
 
   if (waterVolume > 5000) {
     res.status(400).json({ message: "waterVolume cannot exceed 5000" });
   }
 
-  const amountWater = await addAmountWater({ waterVolume, owner });
+  const amountWater = await addAmountWater(req.body, dailyNorma, owner);
 
   if (!amountWater) {
     throw httpError(404);
@@ -30,12 +26,12 @@ const addWater = async (req, res) => {
   res.status(200).json({
     id: amountWater.id,
     waterVolume: amountWater.waterVolume,
-    date: amountWater.date,
+    time: amountWater.time,
   });
 };
 
 const updateWater = async (req, res) => {
-  const { id, waterVolume, date } = req.body;
+  const { id, waterVolume, time } = req.body;
   const { _id: owner } = req.user;
 
   if (waterVolume > 5000) {
@@ -44,9 +40,9 @@ const updateWater = async (req, res) => {
 
   const updatedWater = await updateAmountWater({
     owner,
-    waterId: id,
+    id,
     waterVolume,
-    date,
+    time,
   });
 
   if (!updatedWater) {
@@ -56,15 +52,16 @@ const updateWater = async (req, res) => {
   res.json({
     id: updatedWater.id,
     waterVolume: updatedWater.waterVolume,
-    date: updatedWater.date,
+    date: updatedWater.time,
   });
 };
 
 const deleteWater = async (req, res) => {
   const { _id: owner } = req.user;
   const { id } = req.params;
+  console.log(id);
 
-  const deletedWater = await deleteAmountWater({ waterId: id, owner });
+  const deletedWater = await deleteAmountWater({ id, owner });
 
   if (!deletedWater) {
     throw httpError(404);
@@ -73,47 +70,39 @@ const deleteWater = async (req, res) => {
   res.json({ message: "Successfully deleted" });
 };
 
-const getAmountDaily = async (req, res) => {
+const getToDay = async (req, res) => {
   const { _id: owner } = req.user;
-  const { day } = req.body;
 
-  if (typeof day !== "number") {
-    throw httpError(400, "Invalid type of day, most be number");
-  }
+  const dailyWater = await getEntriesDaily(owner);
 
-  const amountOfDay = await getAmountWaterDaily({ owner, day });
-
-  if (!amountOfDay) {
+  if (!dailyWater) {
     throw httpError(404);
   }
-  const dailyNorm = await getDailyNorm(owner);
 
-  const percentage = amountDailyNorm({ amountOfDay, dailyNorm });
-
-  res.json({ percentage, countofday: amountOfDay });
+  res.json({
+    amountOfWater: dailyWater.amountOfWater,
+    percentage: Math.floor(dailyWater.percentage),
+    entries: dailyWater.entries,
+  });
 };
 
-const getAmountMonthly = async (req, res) => {
+const getMonthly = async (req, res) => {
   const { _id: owner } = req.user;
-  const { month } = req.body;
+  const { date } = req.body;
 
-  const amountOfMonth = await getAmountMonthlyFromDb({ owner, month });
-  let dailyNorm = await getDailyNorm(owner);
-
-  dailyNorm = dailyNorm === "" ? 1800 : dailyNorm;
+  const amountOfMonth = await getEntriesMonthly({ owner, date });
 
   if (!amountMonthly) {
     throw httpError(404);
   }
-  const formattedAmount = amountMonthly(amountOfMonth, dailyNorm);
 
-  res.json({ month: formattedAmount });
+  res.json({ month: amountOfMonth });
 };
 
 module.exports = {
   addWater: ctrlWrapper(addWater),
   updateWater: ctrlWrapper(updateWater),
   deleteWater: ctrlWrapper(deleteWater),
-  getAmountDaily: ctrlWrapper(getAmountDaily),
-  getAmountMonthly: ctrlWrapper(getAmountMonthly),
+  getToDay: ctrlWrapper(getToDay),
+  getMonthly: ctrlWrapper(getMonthly),
 };

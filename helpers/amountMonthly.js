@@ -1,24 +1,34 @@
-const amountMonthly = (amountOfMonth, dailyNorm) => {
-  const groupedAmountOfDay = amountOfMonth.reduce((acc, obj) => {
-    const foundIndex = acc.findIndex((item) => item[0].day === obj.day);
+const amountMonthly = (waterOfMonth) => {
+  const months = [
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
+  ];
 
-    if (foundIndex !== -1) {
-      acc[foundIndex].push(obj);
-    } else {
-      acc.push([obj]);
-    }
-
-    return acc;
-  }, []);
-
-  const groupedOfMeals = groupedAmountOfDay.map((group) => ({
-    day: group[0].day,
-    dailyNorm,
-    percentage: Math.floor((group.reduce((total, obj) => total + obj.waterVolume, 0) / dailyNorm) * 100),
-    numberOfMeals: group.length,
-  
-  }));
-  return groupedOfMeals ;
+  console.log(waterOfMonth);
+  const groupedOfMeals = waterOfMonth.map((waterDay) => {
+    const month = waterDay.date.getMonth();
+    const day = waterDay.date.getDate();
+    return {
+      id: waterDay._id,
+      date: `${months[month]}, ${day}`,
+      amountOfWater: waterDay.entries.length,
+      dailyNorma: waterDay.dailyNorma,
+      percentage: Math.floor(
+        (waterDay.totalVolume / (waterDay.dailyNorma * 1000)) * 100
+      ),
+    };
+  });
+  return groupedOfMeals;
 };
 
 module.exports = amountMonthly;
