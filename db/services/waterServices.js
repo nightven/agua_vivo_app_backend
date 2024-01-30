@@ -1,3 +1,4 @@
+const { amountMonthly } = require("../../helpers");
 const User = require("../models/userModel");
 const Water = require("../models/waterModel");
 
@@ -33,7 +34,7 @@ const addAmountWater = async (body, dailyNorma, owner) => {
     totalVolume: body.waterVolume,
     owner,
   });
-
+  console.log(newEntries);
   const newEntry = newEntries.entries[newEntries.entries.length - 1];
 
   return newEntry;
@@ -68,16 +69,37 @@ const getDailyNorm = async (owner) => {
   return user.dailyNorma;
 };
 
-const getAmountWaterDaily = async ({ owner, day }) => {
-  const amountDaily = await Water.find({ owner, day });
+const getEntriesDaily = async (owner) => {
+  const date = new Date();
 
-  return amountDaily;
+  const waterData = await Water.findOne({
+    date: {
+      $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+    },
+    owner,
+  });
+
+  const dailyWater = {
+    amountOfWater: waterData.entries.length,
+    percentage: (waterData.totalVolume / (waterData.dailyNorma * 1000)) * 100,
+    entries: waterData.entries,
+  };
+
+  return dailyWater;
 };
 
-const getAmountMonthlyFromDb = async ({ owner, month }) => {
-  const amountMonthly = await Water.find({ owner, month });
+const getEntriesMonthly = async ({ owner, date }) => {
+  const [year, month] = date.split("-");
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0);
 
-  return amountMonthly;
+  const waterOfMonth = await Water.find({
+    date: { $gte: startDate, $lte: endDate },
+    owner,
+  });
+
+  const monthlyWater = amountMonthly(waterOfMonth);
+  return monthlyWater;
 };
 
 module.exports = {
@@ -85,6 +107,6 @@ module.exports = {
   addAmountWater,
   updateAmountWater,
   deleteAmountWater,
-  getAmountWaterDaily,
-  getAmountMonthlyFromDb,
+  getEntriesDaily,
+  getEntriesMonthly,
 };

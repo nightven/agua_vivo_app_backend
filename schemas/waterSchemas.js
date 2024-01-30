@@ -1,5 +1,5 @@
 const Joi = require("joi");
-const timeRegex = /^([0-9]{2}):([0-9]{2}) (AM|PM)$/;
+const timeRegex = /^(\d{1,2}):(\d{1,2})\s(AM|PM)$/;
 
 const waterSchemas = Joi.object({
   waterVolume: Joi.number()
@@ -28,25 +28,20 @@ const updateWaterSchemas = Joi.object({
     .messages({ "any.required": "missing required id field" }),
 });
 
-const dailySchemas = Joi.object({
-  day: Joi.number()
-    .min(1)
-    .max(31)
-    .required()
-    .messages({ "any.required": "missing required day field" }),
-});
+// const dailySchemas = Joi.object({
+//   date: Joi.string()
+//     .required()
+//     .messages({ "any.required": "missing required date field" }),
+// });
 
 const monthlySchemas = Joi.object({
-  month: Joi.number()
-    .min(1)
-    .max(12)
+  date: Joi.string()
     .required()
-    .messages({ "any.required": "missing required month field" }),
+    .messages({ "any.required": "missing required date field" }),
 });
 const schemas = {
   waterSchemas,
   updateWaterSchemas,
-  dailySchemas,
   monthlySchemas,
 };
 module.exports = { schemas };

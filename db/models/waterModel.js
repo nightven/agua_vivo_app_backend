@@ -2,7 +2,7 @@ const { Schema, model } = require("mongoose");
 
 const handleMongooseError = require("../../helpers/handleMongooseError");
 
-const timeRegexp = /^([0-9]{2}):([0-9]{2}) (AM|PM)$/;
+const timeRegexp = /^(\d{1,2}):(\d{1,2})\s(AM|PM)$/;
 const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
 
 const entriesSchema = new Schema({

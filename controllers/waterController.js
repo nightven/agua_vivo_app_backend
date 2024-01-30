@@ -1,18 +1,12 @@
 const { findUserById } = require("../db/services/userServices");
 const {
-  getDailyNorm,
   addAmountWater,
   updateAmountWater,
   deleteAmountWater,
-  getAmountWaterDaily,
-  getAmountMonthlyFromDb,
+  getEntriesDaily,
+  getEntriesMonthly,
 } = require("../db/services/waterServices");
-const {
-  ctrlWrapper,
-  httpError,
-  amountDailyNorm,
-  amountMonthly,
-} = require("../helpers");
+const { ctrlWrapper, httpError, amountMonthly } = require("../helpers");
 
 const addWater = async (req, res) => {
   const { waterVolume } = req.body;
@@ -72,47 +66,39 @@ const deleteWater = async (req, res) => {
   res.json({ message: "Successfully deleted" });
 };
 
-const getAmountDaily = async (req, res) => {
+const getToDay = async (req, res) => {
   const { _id: owner } = req.user;
-  const { day } = req.body;
 
-  if (typeof day !== "number") {
-    throw httpError(400, "Invalid type of day, most be number");
-  }
+  const dailyWater = await getEntriesDaily(owner);
 
-  const amountOfDay = await getAmountWaterDaily({ owner, day });
-
-  if (!amountOfDay) {
+  if (!dailyWater) {
     throw httpError(404);
   }
-  const dailyNorm = await getDailyNorm(owner);
 
-  const percentage = amountDailyNorm({ amountOfDay, dailyNorm });
-
-  res.json({ percentage, countofday: amountOfDay });
+  res.json({
+    amountOfWater: dailyWater.amountOfWater,
+    percentage: Math.floor(dailyWater.percentage),
+    entries: dailyWater.entries,
+  });
 };
 
-const getAmountMonthly = async (req, res) => {
+const getMonthly = async (req, res) => {
   const { _id: owner } = req.user;
-  const { month } = req.body;
+  const { date } = req.body;
 
-  const amountOfMonth = await getAmountMonthlyFromDb({ owner, month });
-  let dailyNorm = await getDailyNorm(owner);
-
-  dailyNorm = dailyNorm === "" ? 1800 : dailyNorm;
+  const amountOfMonth = await getEntriesMonthly({ owner, date });
 
   if (!amountMonthly) {
     throw httpError(404);
   }
-  const formattedAmount = amountMonthly(amountOfMonth, dailyNorm);
 
-  res.json({ month: formattedAmount });
+  res.json({ month: amountOfMonth });
 };
 
 module.exports = {
   addWater: ctrlWrapper(addWater),
   updateWater: ctrlWrapper(updateWater),
   deleteWater: ctrlWrapper(deleteWater),
-  getAmountDaily: ctrlWrapper(getAmountDaily),
-  getAmountMonthly: ctrlWrapper(getAmountMonthly),
+  getToDay: ctrlWrapper(getToDay),
+  getMonthly: ctrlWrapper(getMonthly),
 };
