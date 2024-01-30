@@ -3,6 +3,7 @@ const handleMongooseError = require("./handleMongooseError");
 const httpError = require("./httpError");
 const sendEmail = require("./sendEmail");
 const amountNormaLitres = require("./amountNormaLitres");
+const amountMonthly = require("./amountMonthly");
 
 module.exports = {
   ctrlWrapper,
@@ -10,4 +11,5 @@ module.exports = {
   httpError,
   sendEmail,
   amountNormaLitres,
+  amountMonthly,
 };

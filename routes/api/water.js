@@ -12,15 +12,26 @@ router.post(
   controllers.addWater
 );
 
-router.post(
+router.put(
   "/update",
   authenticate,
   validateBody(schemas.updateWaterSchemas),
   controllers.updateWater
 );
 
-router.delete("/:id", authenticate, isValidId, controllers.deleteWater);
+router.delete("/delete/:id", authenticate, isValidId, controllers.deleteWater);
 
-router.get("/amountdaily", authenticate, controllers.getAmountDaily);
+router.get(
+  "/today",
+  authenticate,
+  controllers.getToDay
+);
+
+router.get(
+  "/month",
+  authenticate,
+  validateBody(schemas.monthlySchemas),
+  controllers.getMonthly
+);
 
 module.exports = router;

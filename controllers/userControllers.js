@@ -2,6 +2,7 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const axios = require("axios");
 const queryString = require("querystring");
+
 const {
   GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET,
@@ -12,6 +13,7 @@ const {
 } = process.env;
 
 const { httpError, ctrlWrapper, sendEmail } = require("../helpers");
+
 const {
   findUserByEmail,
   userCollection,
