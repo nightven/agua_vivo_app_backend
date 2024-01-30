@@ -1,4 +1,5 @@
 const Joi = require("joi");
+const timeRegex = /^([0-9]{2}):([0-9]{2}) (AM|PM)$/;
 
 const waterSchemas = Joi.object({
   waterVolume: Joi.number()
@@ -7,6 +8,7 @@ const waterSchemas = Joi.object({
     .required()
     .messages({ "any.required": "missing required waterVolume field" }),
   time: Joi.string()
+    .regex(timeRegex)
     .required()
     .messages({ "any.required": "missing required date field" }),
 });
@@ -17,9 +19,10 @@ const updateWaterSchemas = Joi.object({
     .max(15000)
     .required()
     .messages({ "any.required": "missing required waterVolume field" }),
-  date: Joi.date()
+  time: Joi.string()
+    .regex(timeRegex)
     .required()
-    .messages({ "any.required": "missing required day field" }),
+    .messages({ "any.required": "missing required time field" }),
   id: Joi.string()
     .required()
     .messages({ "any.required": "missing required id field" }),

@@ -4,25 +4,29 @@ const Water = require("../models/waterModel");
 const addAmountWater = async (body, dailyNorma, owner) => {
   const date = new Date();
 
-  const waterList = await Water.findOne({
+  const waterData = await Water.findOne({
     date: {
       $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
     },
     owner,
   });
-  console.log(waterList);
-  if (waterList) {
-    return Water.findByIdAndUpdate(
-      waterList._id,
+
+  if (waterData) {
+    const { entries } = await Water.findByIdAndUpdate(
+      waterData._id,
       {
-        $inc: { totalVolume: body.waterVolume },
+        $inc: { totalVolume: +body.waterVolume },
         $push: { entries: body },
       },
       { new: true }
     );
+
+    const lastEntries = entries[entries.length - 1];
+
+    return lastEntries;
   }
 
-  const newAmount = await Water.create({
+  const newEntries = await Water.create({
     date,
     dailyNorma,
     entries: [body],
@@ -30,17 +34,20 @@ const addAmountWater = async (body, dailyNorma, owner) => {
     owner,
   });
 
-  return newAmount;
+  return newEntries;
 };
 
-const updateAmountWater = async ({ owner, waterId, waterVolume, date }) => {
+const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
   const updatedWater = await Water.findOneAndUpdate(
-    { _id: waterId, owner },
-    { waterVolume, date, owner },
+    { "entries._id": id, owner },
+    { $set: { "entries.$.waterVolume": waterVolume, "entries.$.time": time } },
     { new: true }
   );
 
-  return updatedWater;
+  const updatedEntry = updatedWater.entries.find(
+    (entry) => entry._id.toString() === id
+  );
+  return updatedEntry;
 };
 
 const deleteAmountWater = async ({ waterId, owner }) => {

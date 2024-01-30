@@ -24,6 +24,7 @@ const addWater = async (req, res) => {
   }
 
   const amountWater = await addAmountWater(req.body, dailyNorma, owner);
+  
 
   if (!amountWater) {
     throw httpError(404);
@@ -32,19 +33,19 @@ const addWater = async (req, res) => {
   res.status(200).json({
     id: amountWater.id,
     waterVolume: amountWater.waterVolume,
-    date: amountWater.date,
+    time: amountWater.time,
   });
 };
 
 const updateWater = async (req, res) => {
-  const { id, waterVolume, date } = req.body;
+  const { id, waterVolume, time } = req.body;
   const { _id: owner } = req.user;
 
   const updatedWater = await updateAmountWater({
     owner,
-    waterId: id,
+    id,
     waterVolume,
-    date,
+    time,
   });
 
   if (!updatedWater) {
@@ -54,7 +55,7 @@ const updateWater = async (req, res) => {
   res.json({
     id: updatedWater.id,
     waterVolume: updatedWater.waterVolume,
-    date: updatedWater.date,
+    date: updatedWater.time,
   });
 };
 
