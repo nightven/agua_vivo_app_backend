@@ -24,7 +24,6 @@ const addWater = async (req, res) => {
   }
 
   const amountWater = await addAmountWater(req.body, dailyNorma, owner);
-  
 
   if (!amountWater) {
     throw httpError(404);
@@ -62,8 +61,9 @@ const updateWater = async (req, res) => {
 const deleteWater = async (req, res) => {
   const { _id: owner } = req.user;
   const { id } = req.params;
+  console.log(id);
 
-  const deletedWater = await deleteAmountWater({ waterId: id, owner });
+  const deletedWater = await deleteAmountWater({ id, owner });
 
   if (!deletedWater) {
     throw httpError(404);

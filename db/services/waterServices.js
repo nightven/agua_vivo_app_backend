@@ -34,7 +34,9 @@ const addAmountWater = async (body, dailyNorma, owner) => {
     owner,
   });
 
-  return newEntries;
+  const newEntry = newEntries.entries[newEntries.entries.length - 1];
+
+  return newEntry;
 };
 
 const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
@@ -50,8 +52,12 @@ const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
   return updatedEntry;
 };
 
-const deleteAmountWater = async ({ waterId, owner }) => {
-  const deletedAmount = await Water.findByIdAndDelete({ _id: waterId, owner });
+const deleteAmountWater = async ({ id, owner }) => {
+  const deletedAmount = await Water.findOneAndUpdate(
+    { owner },
+    { $pull: { entries: { _id: id } } },
+    { new: true }
+  );
 
   return deletedAmount;
 };
