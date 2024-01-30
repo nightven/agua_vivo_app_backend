@@ -48,7 +48,7 @@ const updateWater = async (req, res) => {
   res.json({
     id: updatedWater.id,
     waterVolume: updatedWater.waterVolume,
-    date: updatedWater.time,
+    time: updatedWater.time,
   });
 };
 
