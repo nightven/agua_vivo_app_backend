@@ -2,8 +2,16 @@ const jwt = require("jsonwebtoken");
 const gravatar = require("gravatar");
 const axios = require("axios");
 const queryString = require("querystring");
-const { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, PORT, FRONT_END, SECRET_KEY } =
-  process.env;
+
+const {
+  GOOGLE_CLIENT_ID,
+  GOOGLE_CLIENT_SECRET,
+  PORT,
+  FRONT_END,
+  SECRET_KEY,
+  BACK_END,
+} = process.env;
+
 
 const { httpError, ctrlWrapper } = require("../helpers");
 const {
@@ -12,6 +20,7 @@ const {
   updateUserById,
   findUserById,
   updateUserInfo,
+  createGoogleUser,
 } = require("../db/services/userServices");
 
 const register = async (req, res) => {
@@ -67,6 +76,7 @@ const login = async (req, res) => {
   res.json({
     token,
     user: {
+      name: user.name,
       email,
       avatar: user.avatar,
       gender: user.gender,
@@ -113,6 +123,7 @@ const getInfo = async (req, res) => {
 
   res.json({
     user: {
+      name: user.email,
       email: user.email,
       gender: user.gender,
       avatar: user.avatar,
@@ -139,7 +150,7 @@ const dailyNorm = async (req, res) => {
   const { dailyNorma } = req.body;
 
   if (dailyNorma > 15) {
-    throw httpError(400, "The daily rate can be a maximum of 15000 ml");
+    throw httpError(400, "The daily rate can be a maximum of 15 l");
   }
 
   const user = await updateUserInfo(_id, req.body, { new: true });
@@ -181,7 +192,7 @@ const googleRedirect = async (req, res) => {
     data: {
       client_id: GOOGLE_CLIENT_ID,
       client_secret: GOOGLE_CLIENT_SECRET,
-      redirect_uri: `http://localhost:${PORT}/users/google-redirect`,
+      redirect_uri: `http://localhost:8000/users/google-redirect`,
       grant_type: "authorization_code",
       code,
     },
@@ -195,23 +206,17 @@ const googleRedirect = async (req, res) => {
     },
   });
 
-  let user = await findUserByEmail({ email: userData.data.email });
+  const name = userData.data.given_name;
+  const email = userData.data.email;
+
+  let user = await findUserByEmail({ email });
+
   if (!user) {
-    throw httpError(
-      "You should register from front-end first (not postman). Google/Facebook are only for sign-in"
-    );
+    user = await createGoogleUser({ email, name });
   }
 
-  const payload = {
-    id: user._id,
-  };
-
-  const token = jwt.sign(payload, SECRET_KEY);
-
-  await updateUserById(user._id, { token });
-
-  return res.redirect(
-    `http://localhost:5173/agua_vivo_app/google-redirect?accessToken=${token}`
+  res.redirect(
+    `https://localhost:5173/agua_vivo_app/google-redirect?email=${email}`
   );
 };
 

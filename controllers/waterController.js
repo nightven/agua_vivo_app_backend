@@ -34,6 +34,10 @@ const updateWater = async (req, res) => {
   const { id, waterVolume, time } = req.body;
   const { _id: owner } = req.user;
 
+  if (waterVolume > 5000) {
+    res.status(400).json({ message: "waterVolume cannot exceed 5000" });
+  }
+
   const updatedWater = await updateAmountWater({
     owner,
     id,
