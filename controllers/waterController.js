@@ -52,13 +52,13 @@ const updateWater = async (req, res) => {
   res.json({
     id: updatedWater.id,
     waterVolume: updatedWater.waterVolume,
-    date: updatedWater.time,
+    time: updatedWater.time,
   });
 };
 
 const deleteWater = async (req, res) => {
   const { _id: owner } = req.user;
-  const { id } = req.params;
+  const { id } = req.body;
   console.log(id);
 
   const deletedWater = await deleteAmountWater({ id, owner });
