@@ -19,7 +19,7 @@ router.put(
   controllers.updateWater
 );
 
-router.delete("/delete/:id", authenticate, isValidId, controllers.deleteWater);
+router.delete("/delete/", authenticate,  controllers.deleteWater);
 
 router.get(
   "/today",

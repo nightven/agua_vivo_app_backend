@@ -58,7 +58,7 @@ const updateWater = async (req, res) => {
 
 const deleteWater = async (req, res) => {
   const { _id: owner } = req.user;
-  const { id } = req.params;
+  const { id } = req.body;
   console.log(id);
 
   const deletedWater = await deleteAmountWater({ id, owner });
