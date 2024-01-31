@@ -121,14 +121,7 @@
       "get": {
         "tags": ["Auth"],
         "summary": "User current",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
-          }
+        "parameters": [
         ],
         "security": [{ "Bearer": [] }],
         "responses": {
@@ -159,13 +152,6 @@
         "tags": ["Auth"],
         "summary": "User logout",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
-          }
         ],
 
         "security": [{ "Bearer": [] }],
@@ -191,13 +177,6 @@
         "tags": ["User"],
         "summary": "User Information",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
-          }
         ],
         "security": [{ "Bearer": [] }],
         "responses": {
@@ -231,13 +210,6 @@
         "tags": ["User"],
         "summary": "User update",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
-          }
         ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -282,13 +254,6 @@
         "tags": ["User"],
         "summary": "Avatar update",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
-          }
         ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -339,13 +304,6 @@
         "tags": ["User"],
         "summary": "Daily norma update",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
-          }
         ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -391,13 +349,6 @@
         "tags": ["Water"],
         "summary": "Add water",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
-          }
         ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -443,13 +394,6 @@
         "tags": ["Water"],
         "summary": "Update water",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
-          }
         ],
         "security": [{ "Bearer": [] }],
         "requestBody": {
@@ -490,31 +434,21 @@
         }
       }
     },
-    "/api/water/delete": {
+    "/api/water/delete{waterId}": {
       "delete": {
         "tags": ["Water"],
         "summary": "Delete water",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
+     
+{
+            "in": "path",
+            "name": "waterId",
+            "required": "true",
+            "type": "string",
+            "description": "Water's id"
           }
         ],
-        "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Delete one portion of the water",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DeleteWaterRequest"
-              }
-            }
-          }
-        },
+        "security": [{ "Bearer": [] }],
         "responses": {
           "204": {
             "description": "Successfully deleted"
@@ -540,13 +474,6 @@
         "tags": ["Water"],
         "summary": "Get water",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
-          }
         ],
         "security": [{ "Bearer": [] }],
         "responses": {
@@ -576,17 +503,18 @@
         }
       }
     },
-    "/api/water/month": {
+    "/api/water/month{date}": {
       "get": {
         "tags": ["Water"],
         "summary": "Get water",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": { "type": "string" },
-            "description": "Bearer token"
+          
+{
+            "in": "path",
+            "name": "date",
+            "required": "true",
+            "type": "string",
+            "description": "Year and month of water"
           }
         ],
         "security": [{ "Bearer": [] }],
