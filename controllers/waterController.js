@@ -7,7 +7,7 @@ const {
   getEntriesMonthly,
   findOneWater,
 } = require("../db/services/waterServices");
-const { ctrlWrapper, httpError, amountMonthly } = require("../helpers");
+const { ctrlWrapper, httpError } = require("../helpers");
 
 const addWater = async (req, res) => {
   const { waterVolume } = req.body;
@@ -59,15 +59,14 @@ const updateWater = async (req, res) => {
 
 const deleteWater = async (req, res) => {
   const { _id: owner } = req.user;
-  const { id } = req.body;
-  console.log(id);
-  const water = await findOneWater(id);
-  console.log(water);
+  const { waterId } = req.params;
+  const water = await findOneWater(waterId);
+
   if (!water) {
     throw httpError(404);
   }
 
-  const deletedWater = await deleteAmountWater({ id, owner });
+  const deletedWater = await deleteAmountWater({ waterId, owner });
 
   if (!deletedWater) {
     throw httpError(404);
@@ -94,7 +93,9 @@ const getToDay = async (req, res) => {
 
 const getMonthly = async (req, res) => {
   const { _id: owner } = req.user;
-  const { date } = req.body;
+  const { date } = req.params;
+
+  console.log(date);
 
   const amountOfMonth = await getEntriesMonthly({ owner, date });
 
