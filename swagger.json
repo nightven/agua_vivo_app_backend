@@ -1016,15 +1016,23 @@
         }
       },
       "MonthlyWaterResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": { "type": "integer", "example": "65b68e7c7a8fd23d2ed0b0c0" },
-            "numberOfTime": { "type": "integer", "example": 6 },
-            "date": { "type": "string", "example": "January, 28" },
-            "dailyNorma": { "type": "number", "example": 2 },
-            "percentage": { "type": "integer", "example": 80 }
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "65b983fb2b34989f9c4ba2e9"
+                },
+                "date": { "type": "string", "example": "January, 31" },
+                "amountOfWater": { "type": "number", "example": 1 },
+                "dailyNorma": { "type": "number", "example": 1.7 },
+                "percentage": { "type": "integer", "example": 44 }
+              }
+            }
           }
         }
       }
