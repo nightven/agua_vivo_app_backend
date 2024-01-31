@@ -13,7 +13,6 @@ const waterRateSchema = Joi.object({
     .message({ "any.required": "missing required dailyNorma field" }),
 });
 
-
 const schemas = {
   updateSchema,
   waterRateSchema,
