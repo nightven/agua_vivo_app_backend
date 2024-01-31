@@ -19,8 +19,8 @@ const userSchemas = new Schema(
     },
     gender: {
       type: String,
-      enum: ["Woman", "Man"],
-      default: "Woman",
+      enum: ["Woman", "Man", ""],
+      default: "",
     },
     dailyNorma: {
       type: Number,
@@ -32,6 +32,10 @@ const userSchemas = new Schema(
     verify: {
       type: Boolean,
       default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
     },
     token: {
       type: String,

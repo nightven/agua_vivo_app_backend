@@ -3,48 +3,29 @@ const router = express.Router();
 const controllers = require("../../controllers/userControllers");
 const validateBody = require("../../decorators/validateBody");
 const { schemas } = require("../../schemas/usersSchemas");
-const { authenticate, upload, isValidId } = require("../../middlewares");
+const { authenticate, upload, isEmptyBody } = require("../../middlewares");
 
-//! Auth
-router.post(
-  "/register",
-  validateBody(schemas.registerSchema),
-  controllers.register
-);
-router.post("/login", validateBody(schemas.loginSchema), controllers.login);
-router.get("/current", authenticate, controllers.current);
-router.post("/logout", authenticate, controllers.logout);
+//! UserInfo
 router.patch(
   "/avatars",
   authenticate,
   upload.single("avatar"),
   controllers.updateAvatar
 );
-
-//! UserInfo
 router.get("/info", authenticate, controllers.getInfo);
 router.patch(
   "/update-user",
   authenticate,
+  isEmptyBody,
   validateBody(schemas.updateSchema),
   controllers.updateInfo
 );
 router.patch(
   "/water-rate",
   authenticate,
+  isEmptyBody,
   validateBody(schemas.waterRateSchema),
   controllers.dailyNorm
-);
-
-//! Google Auth
-router.get("/google", controllers.googleAuth);
-router.get("/google-redirect", controllers.googleRedirect);
-
-//! Forgot Password
-router.post(
-  "/reset-password",
-  validateBody(schemas.emailSchema),
-  controllers.resetPassword
 );
 
 module.exports = router;
