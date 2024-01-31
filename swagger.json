@@ -503,7 +503,7 @@
         }
       }
     },
-    "/api/water/month{dateOfMonth}": {
+    "/api/water/month{date}": {
       "get": {
         "tags": ["Water"],
         "summary": "Get water",
@@ -511,7 +511,7 @@
           
 {
             "in": "path",
-            "name": "dateOfMonth",
+            "name": "date",
             "required": "true",
             "type": "string",
             "description": "Year and month of water"
