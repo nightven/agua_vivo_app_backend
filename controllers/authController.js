@@ -10,7 +10,7 @@ const gravatar = require("gravatar");
 const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
 
-const { SECRET_KEY } = process.env;
+const { SECRET_KEY, BACK_END } = process.env;
 
 const register = async (req, res) => {
   const { email } = req.body;
@@ -29,7 +29,7 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="http://localhost:8000/users/verify/${verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BACK_END}/auth/verify/${verificationToken}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
@@ -130,7 +130,7 @@ const resendVerifyEmail = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="http://localhost:8000/auth/verify/${user.verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BACK_END}/auth/verify/${user.verificationToken}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
