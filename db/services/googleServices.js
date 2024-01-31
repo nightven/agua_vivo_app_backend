@@ -1,7 +1,20 @@
 const User = require("../models/userModel");
 
-const createUser = async ({ name, email, verify, password, avatarURL }) => {
-  const user = await User.create({ name, email, verify, password, avatarURL });
+const createUser = async ({ name, email, avatar, verify, password }) => {
+  const user = await User.create({
+    name,
+    email,
+    avatar,
+    verify,
+    password,
+  });
+  return user;
+};
+
+const googleCollection = async ({ name, email, avatar, verify, password }) => {
+  const user = new User({ name, email, avatar, verify, password });
+  await user.hashPassword();
+  await user.save();
   return user;
 };
 
@@ -16,6 +29,7 @@ const updateUserById = async (id, token) => {
 };
 
 module.exports = {
+  googleCollection,
   createUser,
   findUserByEmail,
   updateUserById,
