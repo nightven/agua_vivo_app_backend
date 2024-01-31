@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "1.0.0",
+    "version": "2.0.0",
     "title": "Water Tracker paths",
     "description": "Showing off swagger-ui-express",
     "license": {
@@ -15,10 +15,7 @@
   },
   "consumes": ["application/json", "multipart/form-data"],
   "produces": ["application/json"],
-  "servers": [
-    { "url": "http://localhost:8000" },
-    { "url": "https://agua-vivo-app-backend.onrender.com" }
-  ],
+  "servers": [{ "url": "https://agua-vivo-app-backend.onrender.com" }],
   "tags": [
     {
       "name": "Auth",
@@ -32,7 +29,7 @@
     }
   ],
   "paths": {
-    "/users/register": {
+    "/auth/register": {
       "post": {
         "tags": ["Auth"],
         "summary": "User registration",
@@ -62,6 +59,7 @@
           "400": {
             "description": "Bad request"
           },
+
           "401": {
             "description": "Email or password is wrong"
           },
@@ -77,7 +75,7 @@
         }
       }
     },
-    "/users/login": {
+    "/auth/login": {
       "post": {
         "tags": ["Auth"],
         "summary": "User login",
@@ -119,7 +117,7 @@
         }
       }
     },
-    "/users/current": {
+    "/auth/current": {
       "get": {
         "tags": ["Auth"],
         "summary": "User current",
@@ -156,7 +154,7 @@
         }
       }
     },
-    "/users/logout": {
+    "/auth/logout": {
       "post": {
         "tags": ["Auth"],
         "summary": "User logout",
@@ -174,7 +172,7 @@
 
         "responses": {
           "204": {
-            "description": "Successful operation"
+            "description": "No content"
           },
           "400": {
             "description": "Bad request"
@@ -265,25 +263,21 @@
             }
           },
           "400": {
-            "description": "Bad request",
-            "content": {}
+            "description": "gender must be one of [Woman, Man]"
           },
           "401": {
-            "description": "Unauthorized",
-            "content": {}
+            "description": "Unauthorized"
           },
           "404": {
-            "description": "Not Found",
-            "content": {}
+            "description": "Not Found"
           },
           "500": {
-            "description": "Server error",
-            "content": {}
+            "description": "Server error"
           }
         }
       }
     },
-    "/users/updateAvatar": {
+    "/users/avatars": {
       "patch": {
         "tags": ["User"],
         "summary": "Avatar update",
@@ -326,7 +320,7 @@
             }
           },
           "400": {
-            "description": "Bad request"
+            "description": "No file"
           },
           "401": {
             "description": "Unauthorized"
@@ -378,7 +372,7 @@
           },
 
           "400": {
-            "description": "The daily rate can be a maximum of 15 l"
+            "description": "dailyNorma must be less than or equal to 15"
           },
           "401": {
             "description": "Unauthorized"
@@ -430,7 +424,7 @@
           },
 
           "400": {
-            "description": "The waterVolume can be a maximum of 5000ml"
+            "description": "waterVolume cannot exceed 5000"
           },
           "401": {
             "description": "Unauthorized"
@@ -555,17 +549,6 @@
           }
         ],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Get all water portions for the day",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/DailyWaterRequest"
-              }
-            }
-          }
-        },
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -688,7 +671,7 @@
               "gender": {
                 "type": "string",
                 "description": "User's gender",
-                "example": "Man"
+                "example": ""
               }
             }
           }
@@ -745,7 +728,7 @@
               "dailyNorma": {
                 "type": "number",
                 "description": "User's daily norma",
-                "example": 1.8
+                "example": 2
               }
             }
           }
@@ -754,6 +737,11 @@
       "CurrentResponse": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name address",
+            "example": "UserName"
+          },
           "email": {
             "type": "string",
             "format": "email",
@@ -764,6 +752,16 @@
             "type": "string",
             "description": "URL or path to user's avatar",
             "example": "https://res.cloudinary.com/dytpmznz8/image/upload/v1706448821/avatars/65b423e86e2f1f84365454da.jpg"
+          },
+          "gender": {
+            "type": "string",
+            "description": "User's gander address",
+            "example": "Man"
+          },
+          "dailyNorma": {
+            "type": "number",
+            "description": "User's dailyNorma address",
+            "example": 2
           }
         }
       },
@@ -787,10 +785,6 @@
       "GetInfoResponse": {
         "type": "object",
         "properties": {
-          "token": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1YjY2YzAzZjg0ZDhmYjZkYzZlYzMzNCIsImlhdCI6MTcWNjQ1NDAyMH0.QJuy3tAZFRuPiAsB-Wp4JJicwjszwR3nCEL2PzdOSds"
-          },
           "user": {
             "type": "object",
             "properties": {
@@ -818,7 +812,7 @@
               "dailyNorma": {
                 "type": "number",
                 "description": "User's daily norma",
-                "example": 1.8
+                "example": 2
               }
             }
           }
@@ -847,11 +841,6 @@
             "format": "email",
             "description": "User's email address",
             "example": "example@example.com"
-          },
-          "avatar": {
-            "type": "string",
-            "description": "URL or path to user's avatar",
-            "example": "https://res.cloudinary.com/dytpmznz8/image/upload/v1706448821/avatars/65b423e86e2f1f84365454da.jpg"
           },
           "gender": {
             "type": "string",
@@ -910,10 +899,10 @@
             "description": "Amount of water volume",
             "example": 250
           },
-          "date": {
+          "time": {
             "type": "string",
             "description": "Date of water intake",
-            "example": "2024-01-28T17:33:51.217Z"
+            "example": "11:15 AM"
           }
         }
       },
@@ -930,20 +919,21 @@
             "description": "Amount of water volume",
             "example": 250
           },
-          "date": {
+          "time": {
             "type": "string",
             "description": "Date of water intake",
-            "example": "2024-01-28T17:33:51.217Z"
+            "example": "11:15 AM"
           }
         }
       },
       "UpdateWaterRequest": {
         "type": "object",
-        "required": ["id", "waterVolume", "date"],
+        "required": ["id", "waterVolume", "time"],
         "properties": {
           "id": {
             "type": "string",
             "description": "Water id",
+
             "example": "65b6896be224fbb3f1f8c92b"
           },
           "waterVolume": {
@@ -951,10 +941,10 @@
             "description": "Amount of water volume",
             "example": 250
           },
-          "date": {
+          "time": {
             "type": "string",
             "description": "Date of water intake",
-            "example": "2024-01-28T17:33:51.217Z"
+            "example": "11:15 AM"
           }
         }
       },
@@ -971,10 +961,10 @@
             "description": "Amount of water volume",
             "example": 250
           },
-          "date": {
+          "time": {
             "type": "string",
             "description": "Date of water intake",
-            "example": "2024-01-28T17:33:51.217Z"
+            "example": "11:15 AM"
           }
         }
       },
@@ -989,21 +979,12 @@
           }
         }
       },
-      "DailyWaterRequest": {
-        "type": "object",
-        "required": ["date"],
-        "properties": {
-          "date": {
-            "type": "string",
-            "description": "Date of water intake",
-            "example": "2024-01-28"
-          }
-        }
-      },
       "DailyWaterResponse": {
         "type": "object",
         "properties": {
-          "entriesOFWater": {
+          "amountOfWater": { "type": "integer", "example": 1 },
+          "percentage": { "type": "integer", "example": 10 },
+          "entries": {
             "type": "array",
             "items": {
               "type": "object",
@@ -1013,15 +994,14 @@
                   "example": "65b68e7c7a8fd23d2ed0b0c0"
                 },
                 "waterVolume": { "type": "integer", "example": 150 },
-                "date": {
+                "time": {
                   "type": "string",
                   "format": "date-time",
-                  "example": "2024-01-28T17:26:36.365Z"
+                  "example": "08:35 AM"
                 }
               }
             }
-          },
-          "percentage": { "type": "integer", "example": 10 }
+          }
         }
       },
       "MonthlyWaterRequest": {
@@ -1036,15 +1016,23 @@
         }
       },
       "MonthlyWaterResponse": {
-        "type": "array",
-        "items": {
-          "type": "object",
-          "properties": {
-            "_id": { "type": "integer", "example": 28 },
-            "numberOfTime": { "type": "integer", "example": 6 },
-            "date": { "type": "string", "example": "January, 28" },
-            "dailyNorma": { "type": "number", "example": 2 },
-            "percentage": { "type": "integer", "example": 80 }
+        "type": "object",
+        "properties": {
+          "month": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "type": "string",
+                  "example": "65b983fb2b34989f9c4ba2e9"
+                },
+                "date": { "type": "string", "example": "January, 31" },
+                "amountOfWater": { "type": "number", "example": 1 },
+                "dailyNorma": { "type": "number", "example": 1.7 },
+                "percentage": { "type": "integer", "example": 44 }
+              }
+            }
           }
         }
       }
