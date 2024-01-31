@@ -1,3 +1,4 @@
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 const { amountMonthly } = require("../../helpers");
 const User = require("../models/userModel");
 const Water = require("../models/waterModel");
@@ -54,13 +55,24 @@ const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
 };
 
 const deleteAmountWater = async ({ id, owner }) => {
+  const waterVolume = await getWaterVolume(id);
+  console.log(waterVolume);
+
   const deletedAmount = await Water.findOneAndUpdate(
     { owner },
-    { $pull: { entries: { _id: id } } },
+    {
+      $inc: { totalVolume: -waterVolume },
+      $pull: { entries: { _id: id } },
+    },
     { new: true }
   );
 
   return deletedAmount;
+};
+
+const getWaterVolume = async (id) => {
+  const waterVolume = await Water.findOne({ "entries._id": id });
+  return waterVolume.entries[0].waterVolume;
 };
 
 const getDailyNorm = async (owner) => {
@@ -90,16 +102,22 @@ const getEntriesDaily = async (owner) => {
 
 const getEntriesMonthly = async ({ owner, date }) => {
   const [year, month] = date.split("-");
-  const startDate = new Date(year, month - 1, 1);
-  const endDate = new Date(year, month, 0);
+  const startDate = new Date(Date.UTC(year, month - 1, 1));
+  const endDate = new Date(Date.UTC(year, month, 0));
 
   const waterOfMonth = await Water.find({
     date: { $gte: startDate, $lte: endDate },
     owner,
   });
+  console.log(waterOfMonth);
 
   const monthlyWater = amountMonthly(waterOfMonth);
   return monthlyWater;
+};
+
+const findOneWater = async (id) => {
+  const water = await Water.findOne({ "entries._id": id });
+  return water;
 };
 
 module.exports = {
@@ -109,4 +127,5 @@ module.exports = {
   deleteAmountWater,
   getEntriesDaily,
   getEntriesMonthly,
+  findOneWater,
 };

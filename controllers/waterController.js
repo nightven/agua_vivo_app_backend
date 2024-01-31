@@ -5,6 +5,7 @@ const {
   deleteAmountWater,
   getEntriesDaily,
   getEntriesMonthly,
+  findOneWater,
 } = require("../db/services/waterServices");
 const { ctrlWrapper, httpError, amountMonthly } = require("../helpers");
 
@@ -14,7 +15,7 @@ const addWater = async (req, res) => {
   const { dailyNorma } = await findUserById(owner);
 
   if (waterVolume > 5000) {
-    res.status(400).json({ message: "waterVolume cannot exceed 5000" });
+    throw httpError(400, "waterVolume cannot exceed 5000");
   }
 
   const amountWater = await addAmountWater(req.body, dailyNorma, owner);
@@ -35,7 +36,7 @@ const updateWater = async (req, res) => {
   const { _id: owner } = req.user;
 
   if (waterVolume > 5000) {
-    res.status(400).json({ message: "waterVolume cannot exceed 5000" });
+    throw httpError(400, "waterVolume cannot exceed 5000");
   }
 
   const updatedWater = await updateAmountWater({
@@ -60,6 +61,11 @@ const deleteWater = async (req, res) => {
   const { _id: owner } = req.user;
   const { id } = req.body;
   console.log(id);
+  const water = await findOneWater(id);
+  console.log(water);
+  if (!water) {
+    throw httpError(404);
+  }
 
   const deletedWater = await deleteAmountWater({ id, owner });
 
@@ -92,7 +98,7 @@ const getMonthly = async (req, res) => {
 
   const amountOfMonth = await getEntriesMonthly({ owner, date });
 
-  if (!amountMonthly) {
+  if (!amountOfMonth.length) {
     throw httpError(404);
   }
 

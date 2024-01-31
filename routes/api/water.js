@@ -19,13 +19,14 @@ router.put(
   controllers.updateWater
 );
 
-router.delete("/delete/", authenticate,  controllers.deleteWater);
-
-router.get(
-  "/today",
+router.delete(
+  "/delete",
   authenticate,
-  controllers.getToDay
+  validateBody(schemas.deleteWaterSchemas),
+  controllers.deleteWater
 );
+
+router.get("/today", authenticate, controllers.getToDay);
 
 router.get(
   "/month",
