@@ -8,19 +8,24 @@ const nodemailerConfig = {
   port: 465,
   secure: true,
   auth: {
-    user: "nightven@meta.ua",
+    user: "natasha.kulibaba0703@meta.ua",
     pass: META_PASSWORD,
+  },
+  tls: {
+    rejectUnauthorized: false, // Ignore SSL certificate validation
   },
 };
 
 const transport = nodemailer.createTransport(nodemailerConfig);
 
 const sendEmail = async (data) => {
-  const email = { ...data, from: "nightven@meta.ua" };
-  await transport
-    .sendMail(email)
-    .then(() => console.log("Email send success"))
-    .catch((error) => console.log(error.message));
+  const email = { ...data, from: "natasha.kulibaba0703@meta.ua" };
+  try {
+    await transport.sendMail(email);
+    console.log("Email send success");
+  } catch (error) {
+    console.error("Error sending email:", error.message);
+  }
   return true;
 };
 

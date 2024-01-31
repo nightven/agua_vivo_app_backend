@@ -4,6 +4,10 @@ const bcrypt = require("bcrypt");
 
 const userSchemas = new Schema(
   {
+    name: {
+      type: String,
+      default: "",
+    },
     password: {
       type: String,
       required: [true, "Set password for user"],
@@ -15,15 +19,23 @@ const userSchemas = new Schema(
     },
     gender: {
       type: String,
-      enum: ["Woman", "Man"],
-      default: "Woman",
+      enum: ["Woman", "Man", ""],
+      default: "",
     },
     dailyNorma: {
       type: Number,
-      default: 1.8,
+      default: 2,
     },
     avatar: {
       type: String,
+    },
+    verify: {
+      type: Boolean,
+      default: false,
+    },
+    verificationToken: {
+      type: String,
+      required: [true, "Verify token is required"],
     },
     token: {
       type: String,

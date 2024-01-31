@@ -19,20 +19,20 @@ router.put(
   controllers.updateWater
 );
 
-router.delete("/delete/:id", authenticate, isValidId, controllers.deleteWater);
-
-router.get(
-  "/amountdaily",
+router.delete(
+  "/delete",
   authenticate,
-  validateBody(schemas.dailySchemas),
-  controllers.getAmountDaily
+  validateBody(schemas.deleteWaterSchemas),
+  controllers.deleteWater
 );
 
+router.get("/today", authenticate, controllers.getToDay);
+
 router.get(
-  "/amoutmonth",
+  "/month",
   authenticate,
   validateBody(schemas.monthlySchemas),
-  controllers.getAmountMonthly
+  controllers.getMonthly
 );
 
 module.exports = router;
