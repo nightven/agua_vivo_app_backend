@@ -54,15 +54,14 @@ const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
   return updatedEntry;
 };
 
-const deleteAmountWater = async ({ id, owner }) => {
-  const waterVolume = await getWaterVolume(id);
-  console.log(waterVolume);
+const deleteAmountWater = async ({ waterId, owner }) => {
+  const waterVolume = await getWaterVolume(waterId);
 
   const deletedAmount = await Water.findOneAndUpdate(
     { owner },
     {
       $inc: { totalVolume: -waterVolume },
-      $pull: { entries: { _id: id } },
+      $pull: { entries: { _id: waterId } },
     },
     { new: true }
   );
@@ -70,8 +69,8 @@ const deleteAmountWater = async ({ id, owner }) => {
   return deletedAmount;
 };
 
-const getWaterVolume = async (id) => {
-  const waterVolume = await Water.findOne({ "entries._id": id });
+const getWaterVolume = async (waterId) => {
+  const waterVolume = await Water.findOne({ "entries._id": waterId });
   return waterVolume.entries[0].waterVolume;
 };
 

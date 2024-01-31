@@ -28,27 +28,8 @@ const updateWaterSchemas = Joi.object({
     .messages({ "any.required": "missing required id field" }),
 });
 
-// const dailySchemas = Joi.object({
-//   date: Joi.string()
-//     .required()
-//     .messages({ "any.required": "missing required date field" }),
-// });
-
-const monthlySchemas = Joi.object({
-  date: Joi.string()
-    .required()
-    .messages({ "any.required": "missing required date field" }),
-});
-
-const deleteWaterSchemas = Joi.object({
-  id: Joi.string()
-    .required()
-    .messages({ "any.required": "missing required id field" }),
-});
 const schemas = {
   waterSchemas,
   updateWaterSchemas,
-  monthlySchemas,
-  deleteWaterSchemas
 };
 module.exports = { schemas };

@@ -3,7 +3,7 @@ const validateBody = require("../../decorators/validateBody");
 const router = express.Router();
 const { schemas } = require("../../schemas/waterSchemas");
 const controllers = require("../../controllers/waterController");
-const { authenticate, isValidId } = require("../../middlewares");
+const { authenticate, isValidId, isValidMonth } = require("../../middlewares");
 
 router.post(
   "/add",
@@ -20,19 +20,14 @@ router.put(
 );
 
 router.delete(
-  "/delete",
+  "/delete/:waterId",
   authenticate,
-  validateBody(schemas.deleteWaterSchemas),
+  isValidId,
   controllers.deleteWater
 );
 
 router.get("/today", authenticate, controllers.getToDay);
 
-router.get(
-  "/month",
-  authenticate,
-  validateBody(schemas.monthlySchemas),
-  controllers.getMonthly
-);
+router.get("/month/:date", authenticate, isValidMonth, controllers.getMonthly);
 
 module.exports = router;
