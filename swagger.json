@@ -121,7 +121,8 @@
       "get": {
         "tags": ["Auth"],
         "summary": "User current",
-        "parameters": [
+        "parameters": [
+
         ],
         "security": [{ "Bearer": [] }],
         "responses": {
@@ -448,7 +449,8 @@
             "description": "Water's id"
           }
         ],
-        "security": [{ "Bearer": [] }],
+        "security": [{ "Bearer": [] }],
+
         "responses": {
           "204": {
             "description": "Successfully deleted"
@@ -651,7 +653,7 @@
               "gender": {
                 "type": "string",
                 "description": "User's gender",
-                "example": "Woman"
+                "example": ""
               },
               "dailyNorma": {
                 "type": "number",
@@ -684,7 +686,7 @@
           "gender": {
             "type": "string",
             "description": "User's gander address",
-            "example": "Man"
+            "example": ""
           },
           "dailyNorma": {
             "type": "number",
@@ -735,7 +737,7 @@
               "gender": {
                 "type": "string",
                 "description": "User's gender",
-                "example": "Woman"
+                "example": "woman"
               },
               "dailyNorma": {
                 "type": "number",
@@ -752,7 +754,7 @@
           "gender": {
             "type": "string",
             "description": "User's gender",
-            "example": "Woman"
+            "example": "woman"
           }
         }
       },
@@ -773,7 +775,7 @@
           "gender": {
             "type": "string",
             "description": "User's gender",
-            "example": "Woman"
+            "example": "woman"
           }
         }
       },
