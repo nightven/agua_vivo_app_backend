@@ -19,7 +19,7 @@ const userSchemas = new Schema(
     },
     gender: {
       type: String,
-      enum: ["Woman", "Man", ""],
+      enum: ["woman", "man", ""],
       default: "",
     },
     dailyNorma: {
