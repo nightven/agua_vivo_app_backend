@@ -4,14 +4,17 @@ const {
   FRONT_END,
   SECRET_KEY,
   BACK_END,
+  DEFAULT_PASSWORD,
 } = process.env;
 
-const queryString = require("querystring");
+const queryString = require("query-string");
+const axios = require("axios");
+const jwt = require("jsonwebtoken");
 
 const {
-  createUser,
   findUserByEmail,
   updateUserById,
+  googleCollection,
 } = require("../db/services/googleServices");
 const { ctrlWrapper } = require("../helpers");
 
@@ -64,12 +67,12 @@ const googleRedirect = async (req, res) => {
   let user = await findUserByEmail({ email });
 
   if (!user) {
-    user = await createUser({
+    user = await googleCollection({
       name: userData.data.name,
       email,
+      avatar: userData.data.picture,
       verify: true,
-      password: "12345678a",
-      avatarURL: userData.data.picture,
+      password: DEFAULT_PASSWORD,
     });
   }
 
@@ -81,6 +84,7 @@ const googleRedirect = async (req, res) => {
 
   await updateUserById(user._id, { token });
 
+  // Замість /google посилання на майбутній ендпоінт на фронтенді
   res.redirect(`http://localhost:5173/agua_vivo_app/google?token=${token}`);
 };
 

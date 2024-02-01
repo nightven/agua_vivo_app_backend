@@ -2,7 +2,7 @@ const Joi = require("joi");
 
 const updateSchema = Joi.object({
   name: Joi.string(),
-  gender: Joi.string().valid("Woman", "Man"),
+  gender: Joi.string().valid("woman", "man"),
   password: Joi.string().min(8).max(64),
 });
 
@@ -12,7 +12,6 @@ const waterRateSchema = Joi.object({
     .max(15)
     .message({ "any.required": "missing required dailyNorma field" }),
 });
-
 
 const schemas = {
   updateSchema,
