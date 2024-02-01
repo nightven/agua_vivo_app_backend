@@ -72,7 +72,7 @@ const deleteWater = async (req, res) => {
     throw httpError(404);
   }
 
-  res.json({ message: "Successfully deleted" });
+  res.json(waterId);
 };
 
 const getToDay = async (req, res) => {
