@@ -108,6 +108,10 @@ const getEntriesDaily = async (owner) => {
     owner,
   });
 
+  if (!waterData) {
+    return null;
+  }
+
   const dailyWater = {
     amountOfWater: waterData.entries.length,
     percentage: (waterData.totalVolume / (waterData.dailyNorma * 1000)) * 100,
