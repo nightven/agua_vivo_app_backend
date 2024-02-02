@@ -435,7 +435,7 @@
         }
       }
     },
-    "/api/water/delete{waterId}": {
+    "/api/water/delete/{waterId}": {
       "delete": {
         "tags": ["Water"],
         "summary": "Delete water",
@@ -511,7 +511,7 @@
         }
       }
     },
-    "/api/water/month{date}": {
+    "/api/water/month/{date}": {
       "get": {
         "tags": ["Water"],
         "summary": "Get water",

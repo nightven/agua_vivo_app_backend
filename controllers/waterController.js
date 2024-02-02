@@ -71,7 +71,7 @@ const deleteWater = async (req, res) => {
   if (!deletedWater) {
     throw httpError(404);
   }
-  console.log(deletedWater);
+
   res.json({ _id: waterId });
 };
 

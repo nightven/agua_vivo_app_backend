@@ -1,5 +1,5 @@
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-const { amountMonthly } = require("../../helpers");
+const { amountMonthly, httpError } = require("../../helpers");
 const User = require("../models/userModel");
 const Water = require("../models/waterModel");
 
@@ -42,9 +42,22 @@ const addAmountWater = async (body, dailyNorma, owner) => {
 };
 
 const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
+  const water = await Water.findOne({ "entries._id": id, owner });
+
+  if (!water) {
+    throw httpError(404);
+  }
+
+  const oldWaterVolume = water.entries.find(
+    (entry) => entry._id.toString() === id
+  ).waterVolume;
+
   const updatedWater = await Water.findOneAndUpdate(
     { "entries._id": id, owner },
-    { $set: { "entries.$.waterVolume": waterVolume, "entries.$.time": time } },
+    {
+      $set: { "entries.$.waterVolume": waterVolume, "entries.$.time": time },
+      $inc: { totalVolume: waterVolume - oldWaterVolume },
+    },
     { new: true }
   );
 
@@ -56,6 +69,9 @@ const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
 
 const deleteAmountWater = async ({ waterId, owner }) => {
   const waterVolume = await getWaterVolume(waterId);
+  console.log("Owner:", owner);
+  console.log("WaterId:", waterId);
+  console.log("waterVolume:", waterVolume);
 
   const deletedAmount = await Water.findOneAndUpdate(
     { owner },
@@ -65,6 +81,8 @@ const deleteAmountWater = async ({ waterId, owner }) => {
     },
     { new: true }
   );
+
+  console.log("deletedAmount:", deletedAmount);
 
   return deletedAmount;
 };
