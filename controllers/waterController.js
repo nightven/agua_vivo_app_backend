@@ -25,7 +25,7 @@ const addWater = async (req, res) => {
   }
 
   res.status(200).json({
-    id: amountWater.id,
+    _id: amountWater.id,
     waterVolume: amountWater.waterVolume,
     time: amountWater.time,
   });
@@ -51,7 +51,7 @@ const updateWater = async (req, res) => {
   }
 
   res.json({
-    id: updatedWater.id,
+    _id: updatedWater.id,
     waterVolume: updatedWater.waterVolume,
     time: updatedWater.time,
   });
@@ -72,7 +72,7 @@ const deleteWater = async (req, res) => {
     throw httpError(404);
   }
 
-  res.json(waterId);
+  res.json({ _id: waterId });
 };
 
 const getToDay = async (req, res) => {
