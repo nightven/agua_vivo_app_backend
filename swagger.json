@@ -453,8 +453,14 @@
 
         "responses": {
           "204": {
-            "description": "Successfully deleted"
-          },
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeleteWaterResponse"
+                }
+              }
+            }          },
 
           "400": {
             "description": "Bed request"
@@ -602,6 +608,11 @@
                 "type": "string",
                 "description": "User's gender",
                 "example": ""
+              },
+              "dailyNorma": {
+                "type": "number",
+                "description": "User's daily norma",
+                "example": 2
               }
             }
           }
@@ -751,10 +762,31 @@
       "UpdateUserRequest": {
         "type": "object",
         "properties": {
+          "name": {
+            "type": "string",
+            "description": "User's name address",
+            "example": "UserName"
+          },
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email address",
+            "example": "example@example.com"
+          },
+          "password": {
+            "type": "string",
+            "description": "User's new password",
+            "example": "12345678Aa"
+          },
+          "avatar": {
+            "type": "string",
+            "description": "URL or path to user's avatar",
+            "example": "https://res.cloudinary.com/dytpmznz8/image/upload/v1706448821/avatars/65b423e86e2f1f84365454da.jpg"
+          },
           "gender": {
             "type": "string",
-            "description": "User's gender",
-            "example": "woman"
+            "description": "User's gander address",
+            "example": ""
           }
         }
       },
@@ -772,10 +804,20 @@
             "description": "User's email address",
             "example": "example@example.com"
           },
+          "avatar": {
+            "type": "string",
+            "description": "URL or path to user's avatar",
+            "example": "https://res.cloudinary.com/dytpmznz8/image/upload/v1706448821/avatars/65b423e86e2f1f84365454da.jpg"
+          },
           "gender": {
             "type": "string",
             "description": "User's gender",
             "example": "woman"
+          },
+          "dailyNorma": {
+            "type": "number",
+            "description": "User's dailyNorma address",
+            "example": 2
           }
         }
       },
@@ -839,7 +881,7 @@
       "AddWaterResponse": {
         "type": "object",
         "properties": {
-          "id": {
+          "_id": {
             "type": "string",
             "description": "Water id",
             "example": "65b6896be224fbb3f1f8c92b"
@@ -881,7 +923,7 @@
       "UpdateWaterResponse": {
         "type": "object",
         "properties": {
-          "id": {
+          "_id": {
             "type": "string",
             "description": "Water id",
             "example": "65b6896be224fbb3f1f8c92b"
@@ -898,11 +940,10 @@
           }
         }
       },
-      "DeleteWaterRequest": {
+      "DeleteWaterResponse": {
         "type": "object",
-        "required": ["id"],
         "properties": {
-          "id": {
+          "_id": {
             "type": "string",
             "description": "Water id",
             "example": "65b6896be224fbb3f1f8c92b"
@@ -953,7 +994,7 @@
             "items": {
               "type": "object",
               "properties": {
-                "id": {
+                "_id": {
                   "type": "string",
                   "example": "65b983fb2b34989f9c4ba2e9"
                 },
