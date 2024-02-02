@@ -4,6 +4,7 @@ const {
   updateUserById,
   verifyByToken,
   verifyEmailByToken,
+  findUserByIdAndUpdate,
 } = require("../db/services/authService");
 const { httpError, sendEmail, ctrlWrapper } = require("../helpers");
 const gravatar = require("gravatar");
@@ -22,18 +23,17 @@ const register = async (req, res) => {
 
   const avatar = gravatar.url(email);
 
-  const verificationToken = nanoid();
-  const newUser = userCollection({ ...req.body, avatar, verificationToken });
-  await newUser.hashPassword();
+  const newUser = userCollection({ ...req.body, avatar });
 
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BACK_END}/auth/verify/${verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="http://localhost:8000/auth/verify/${newUser._id}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
 
+  await newUser.hashPassword();
   await newUser.save();
 
   const payload = {
@@ -56,6 +56,10 @@ const login = async (req, res) => {
 
   if (!user) {
     throw httpError(401, "Email or password is wrong");
+  }
+
+  if (!user.verify) {
+    throw httpError(401, "Email not verified");
   }
 
   const comparePasswords = await user.comparePassword(password);
@@ -96,21 +100,17 @@ const logout = async (req, res) => {
 };
 
 const verifyEmail = async (req, res) => {
-  const { verificationToken } = req.params;
-  if (!verificationToken) {
+  const { userId } = req.params;
+  if (!userId) {
     throw httpError(
       400,
       "Verification token is missing in the request params."
     );
   }
-  const user = await verifyByToken(verificationToken);
+  const user = await findUserByIdAndUpdate(userId, { verify: true });
   if (!user) {
     throw httpError(404);
   }
-  await verifyEmailByToken(user._id, {
-    verify: true,
-    verificationToken: null,
-  });
 
   res.json({
     message: "Verification successful",
