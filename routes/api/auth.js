@@ -25,7 +25,11 @@ router.post(
 );
 
 //! Forgot Password
-router.post("/forgot-password", controllers.forgotPassword);
+router.post(
+  "/forgot-password",
+  validateBody(schemas.emailSchema),
+  controllers.forgotPassword
+);
 router.patch(
   "/reset-password",
   validateBody(schemas.resetPassword),
