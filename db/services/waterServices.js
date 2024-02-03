@@ -98,7 +98,7 @@ const getDailyNorm = async (owner) => {
 
   return user.dailyNorma;
 };
-const updateDailyNorm = async ({ owner, dailyNorma }) => {  const date = new Date();
+const updateDailyNorma = async ({ owner, dailyNorma }) => {  const date = new Date();
 
   const waterData = await Water.findOneAndUpdate(
     {
@@ -164,5 +164,5 @@ module.exports = {
   getEntriesDaily,
   getEntriesMonthly,
   findOneWater,
-  updateDailyNorm,
+  updateDailyNorma,
 };
