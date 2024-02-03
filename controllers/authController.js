@@ -114,10 +114,6 @@ const verifyEmail = async (req, res) => {
   });
 
   res.redirect(`http://localhost:5173/agua_vivo_app/signin`);
-
-  res.json({
-    message: "Verification successfull",
-  });
 };
 
 const resendVerifyEmail = async (req, res) => {
