@@ -1,6 +1,7 @@
 const { httpError, ctrlWrapper } = require("../helpers");
 
 const { findUserById, updateUserInfo } = require("../db/services/userServices");
+const { updateDailyNorma } = require("../db/services/waterServices");
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
@@ -73,6 +74,10 @@ const dailyNorm = async (req, res) => {
   const user = await updateUserInfo(_id, req.body, { new: true });
 
   if (!user) {
+    throw httpError(404);
+  }
+  const norma = await updateDailyNorma({ owner: _id, dailyNorma });
+  if (!norma) {
     throw httpError(404);
   }
 
