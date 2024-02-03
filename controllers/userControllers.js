@@ -48,7 +48,7 @@ const updateInfo = async (req, res) => {
 
   if (password && newPassword) {
     if (password === newPassword) {
-      throw httpError(400, "The new password cannot be equal to the old one");
+      throw httpError(401, "The new password cannot be equal to the old one");
     }
 
     const user = await findUserById(_id);
