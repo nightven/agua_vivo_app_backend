@@ -98,6 +98,20 @@ const getDailyNorm = async (owner) => {
 
   return user.dailyNorma;
 };
+const updateDailyNorm = async ({ owner, dailyNorma }) => {  const date = new Date();
+
+  const waterData = await Water.findOneAndUpdate(
+    {
+      date: {
+        $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+      },
+      owner,
+    },
+    { dailyNorma },
+    { mew: true }
+  );
+  return waterData;
+};
 
 const getEntriesDaily = async (owner) => {
   const date = new Date();
@@ -150,4 +164,5 @@ module.exports = {
   getEntriesDaily,
   getEntriesMonthly,
   findOneWater,
+  updateDailyNorm,
 };
