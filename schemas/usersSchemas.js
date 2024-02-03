@@ -4,6 +4,7 @@ const updateSchema = Joi.object({
   name: Joi.string(),
   gender: Joi.string().valid("woman", "man"),
   password: Joi.string().min(8).max(64),
+  newPassword: Joi.string().min(8).max(64),
 });
 
 const waterRateSchema = Joi.object({
