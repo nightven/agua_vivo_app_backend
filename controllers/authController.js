@@ -2,8 +2,6 @@ const {
   findUserByEmail,
   userCollection,
   updateUserById,
-  verifyByToken,
-  verifyEmailByToken,
   findUserByIdAndUpdate,
 } = require("../db/services/authService");
 const { httpError, sendEmail, ctrlWrapper } = require("../helpers");
@@ -22,13 +20,13 @@ const register = async (req, res) => {
   }
 
   const avatar = gravatar.url(email);
-
-  const newUser = userCollection({ ...req.body, avatar });
+  const verificationToken = nanoid();
+  const newUser = userCollection({ ...req.body, avatar, verificationToken });
 
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="http://localhost:8000/auth/verify/${newUser._id}">Click verify email</a>`,
+    html: `<a target="_blank" href="http://localhost:8000/auth/verify/${verificationToken}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
@@ -51,6 +49,7 @@ const register = async (req, res) => {
       avatar,
       gender: newUser.gender,
       dailyNorma: newUser.dailyNorma,
+      verificationToken,
     },
   });
 };
@@ -105,20 +104,19 @@ const logout = async (req, res) => {
 };
 
 const verifyEmail = async (req, res) => {
-  const { userId } = req.params;
-  if (!userId) {
-    throw httpError(
-      400,
-      "Verification token is missing in the request params."
-    );
-  }
-  const user = await findUserByIdAndUpdate(userId, { verify: true });
-  if (!user) {
-    throw httpError(404);
-  }
+  const { verificationToken } = req.params;
+  const user = await findUserByEmail({ verificationToken });
+  if (!user) throw httpError(404);
+
+  await findUserByIdAndUpdate(user._id, {
+    verify: true,
+    verificationToken: null,
+  });
+
+  res.redirect(`http://localhost:5173/agua_vivo_app/signin`);
 
   res.json({
-    message: "Verification successful",
+    message: "Verification successfull",
   });
 };
 
@@ -135,7 +133,7 @@ const resendVerifyEmail = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="${BACK_END}/auth/verify/${user.verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="http://localhost:8000/auth/verify/${user.verificationToken}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);

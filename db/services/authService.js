@@ -10,8 +10,8 @@ const updateUserById = async (id, token) => {
   return user;
 };
 
-const userCollection = (body, avatar) => {
-  const user = new User(body, avatar);
+const userCollection = (body, avatar, token) => {
+  const user = new User(body, avatar, token);
   return user;
 };
 
@@ -23,8 +23,13 @@ const verifyEmailByToken = async (id, { verify, verificationToken }) => {
   return user;
 };
 
-const findUserByIdAndUpdate = async (id, { verify }) => {
-  const user = await User.findByIdAndUpdate(id, { verify });
+const findUserByIdAndUpdate = async (id, { verify, verificationToken }) => {
+  const user = await User.findByIdAndUpdate(id, { verify, verificationToken });
+  return user;
+};
+
+const findVerificationToken = async ({ verificationToken }) => {
+  const user = await User.findOne({ verificationToken });
   return user;
 };
 
@@ -33,5 +38,6 @@ module.exports = {
   findUserByEmail,
   updateUserById,
   userCollection,
+  findVerificationToken,
   verifyEmailByToken,
 };

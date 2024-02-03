@@ -15,7 +15,7 @@ router.post("/login", validateBody(schemas.loginSchema), controllers.login);
 router.get("/current", authenticate, controllers.current);
 router.post("/logout", authenticate, controllers.logout);
 
-router.get("/verify/:userId", controllers.verifyEmail);
+router.get("/verify/:verificationToken", controllers.verifyEmail);
 router.post(
   "/verify",
   validateBody(schemas.emailSchema),
