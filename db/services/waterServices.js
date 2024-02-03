@@ -88,8 +88,9 @@ const deleteAmountWater = async ({ waterId, owner }) => {
 };
 
 const getWaterVolume = async (waterId) => {
-  const waterVolume = await Water.findOne({ "entries._id": waterId });
-  return waterVolume.entries[0].waterVolume;
+  const water = await Water.findOne({ "entries._id": waterId });
+  const volume = water.entries.find((water) => water.id === waterId);
+  return volume.waterVolume;
 };
 
 const getDailyNorm = async (owner) => {
