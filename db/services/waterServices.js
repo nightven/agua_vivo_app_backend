@@ -3,7 +3,19 @@ const { amountMonthly, httpError } = require("../../helpers");
 const User = require("../models/userModel");
 const Water = require("../models/waterModel");
 
-const addAmountWater = async (body, dailyNorma, owner) => {
+const createWater = async ({ owner, dailyNorma }) => {
+  const date = new Date();
+  const newEntries = await Water.create({
+    date,
+    dailyNorma,
+    entries: [],
+    totalVolume: 0,
+    owner,
+  });
+  return newEntries;
+};
+
+const addAmountWater = async (body, owner) => {
   const date = new Date();
 
   const waterData = await Water.findOne({
@@ -27,15 +39,6 @@ const addAmountWater = async (body, dailyNorma, owner) => {
 
     return lastEntries;
   }
-
-  const newEntries = await Water.create({
-    date,
-    dailyNorma,
-    entries: [body],
-    totalVolume: body.waterVolume,
-    owner,
-  });
-  console.log(newEntries);
   const newEntry = newEntries.entries[newEntries.entries.length - 1];
 
   return newEntry;
@@ -98,7 +101,8 @@ const getDailyNorm = async (owner) => {
 
   return user.dailyNorma;
 };
-const updateDailyNorma = async ({ owner, dailyNorma }) => {  const date = new Date();
+const updateDailyNorma = async ({ owner, dailyNorma }) => {
+  const date = new Date();
 
   const waterData = await Water.findOneAndUpdate(
     {
@@ -157,6 +161,7 @@ const findOneWater = async (id) => {
 };
 
 module.exports = {
+  createWater,
   getDailyNorm,
   addAmountWater,
   updateAmountWater,

@@ -9,6 +9,7 @@ const { httpError, sendEmail, ctrlWrapper } = require("../helpers");
 const gravatar = require("gravatar");
 const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
+const { createWater } = require("../db/services/waterServices");
 
 const { SECRET_KEY, BACK_END } = process.env;
 
@@ -43,6 +44,14 @@ const register = async (req, res) => {
   const token = jwt.sign(payload, SECRET_KEY);
 
   await updateUserById(newUser._id, { token });
+
+  const nweWater = await createWater({
+    owner: newUser._id,
+    dailyNorma: newUser.dailyNorma,
+  });
+  if (!nweWater) {
+    throw httpError(400)
+  }
 
   res.status(201).json({
     token,
