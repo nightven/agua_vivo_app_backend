@@ -39,7 +39,15 @@ const addAmountWater = async (body, owner) => {
 
     return lastEntries;
   }
-  const newEntry = newEntries.entries[newEntries.entries.length - 1];
+  const newWater = await createWater({
+    owner,
+    dailyNorma: 2,
+  });
+  if (!newWater) {
+    throw httpError(400);
+  }
+
+  const newEntry = newWater.entries[newWater.entries.length - 1];
 
   return newEntry;
 };

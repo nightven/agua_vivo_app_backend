@@ -123,7 +123,6 @@ const verifyEmail = async (req, res) => {
     verificationToken: null,
   });
 
-
   res.redirect(`${FRONT_END}/signin`);
 };
 
