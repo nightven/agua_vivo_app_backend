@@ -85,7 +85,7 @@ const googleRedirect = async (req, res) => {
   await updateUserById(user._id, { token });
 
   // Замість /google посилання на майбутній ендпоінт на фронтенді
-  res.redirect(`${FRONT_END}/agua_vivo_app/google?token=${token}`);
+  res.redirect(`${FRONT_END}/google?token=${token}`);
 };
 
 module.exports = {
