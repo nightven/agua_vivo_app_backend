@@ -3,7 +3,19 @@ const { amountMonthly, httpError } = require("../../helpers");
 const User = require("../models/userModel");
 const Water = require("../models/waterModel");
 
-const addAmountWater = async (body, dailyNorma, owner) => {
+const createWater = async ({ owner, dailyNorma }) => {
+  const date = new Date();
+  const newEntries = await Water.create({
+    date,
+    dailyNorma,
+    entries: [],
+    totalVolume: 0,
+    owner,
+  });
+  return newEntries;
+};
+
+const addAmountWater = async (body, owner) => {
   const date = new Date();
 
   const waterData = await Water.findOne({
@@ -27,15 +39,6 @@ const addAmountWater = async (body, dailyNorma, owner) => {
 
     return lastEntries;
   }
-
-  const newEntries = await Water.create({
-    date,
-    dailyNorma,
-    entries: [body],
-    totalVolume: body.waterVolume,
-    owner,
-  });
-  console.log(newEntries);
   const newEntry = newEntries.entries[newEntries.entries.length - 1];
 
   return newEntry;
@@ -88,14 +91,30 @@ const deleteAmountWater = async ({ waterId, owner }) => {
 };
 
 const getWaterVolume = async (waterId) => {
-  const waterVolume = await Water.findOne({ "entries._id": waterId });
-  return waterVolume.entries[0].waterVolume;
+  const water = await Water.findOne({ "entries._id": waterId });
+  const volume = water.entries.find((water) => water.id === waterId);
+  return volume.waterVolume;
 };
 
 const getDailyNorm = async (owner) => {
   const user = await User.findOne({ _id: owner });
 
   return user.dailyNorma;
+};
+const updateDailyNorma = async ({ owner, dailyNorma }) => {
+  const date = new Date();
+
+  const waterData = await Water.findOneAndUpdate(
+    {
+      date: {
+        $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+      },
+      owner,
+    },
+    { dailyNorma },
+    { mew: true }
+  );
+  return waterData;
 };
 
 const getEntriesDaily = async (owner) => {
@@ -142,6 +161,7 @@ const findOneWater = async (id) => {
 };
 
 module.exports = {
+  createWater,
   getDailyNorm,
   addAmountWater,
   updateAmountWater,
@@ -149,4 +169,5 @@ module.exports = {
   getEntriesDaily,
   getEntriesMonthly,
   findOneWater,
+  updateDailyNorma,
 };

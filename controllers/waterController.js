@@ -1,4 +1,3 @@
-const { findUserById } = require("../db/services/userServices");
 const {
   addAmountWater,
   updateAmountWater,
@@ -12,13 +11,13 @@ const { ctrlWrapper, httpError } = require("../helpers");
 const addWater = async (req, res) => {
   const { waterVolume } = req.body;
   const { _id: owner } = req.user;
-  const { dailyNorma } = await findUserById(owner);
+ 
 
   if (waterVolume > 5000) {
     throw httpError(400, "waterVolume cannot exceed 5000");
   }
 
-  const amountWater = await addAmountWater(req.body, dailyNorma, owner);
+  const amountWater = await addAmountWater(req.body, owner);
 
   if (!amountWater) {
     throw httpError(404);

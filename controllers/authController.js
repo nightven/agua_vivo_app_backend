@@ -2,15 +2,16 @@ const {
   findUserByEmail,
   userCollection,
   updateUserById,
-  verifyByToken,
-  verifyEmailByToken,
+  findUserByIdAndUpdate,
 } = require("../db/services/authService");
 const { httpError, sendEmail, ctrlWrapper } = require("../helpers");
 const gravatar = require("gravatar");
 const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
+const { createWater } = require("../db/services/waterServices");
+const { findUserById } = require("../db/services/userServices");
 
-const { SECRET_KEY, BACK_END } = process.env;
+const { SECRET_KEY, BACK_END, FRONT_END } = process.env;
 
 const register = async (req, res) => {
   const { email } = req.body;
@@ -21,10 +22,8 @@ const register = async (req, res) => {
   }
 
   const avatar = gravatar.url(email);
-
   const verificationToken = nanoid();
   const newUser = userCollection({ ...req.body, avatar, verificationToken });
-  await newUser.hashPassword();
 
   const verifyEmail = {
     to: email,
@@ -34,6 +33,7 @@ const register = async (req, res) => {
 
   await sendEmail(verifyEmail);
 
+  await newUser.hashPassword();
   await newUser.save();
 
   const payload = {
@@ -44,6 +44,14 @@ const register = async (req, res) => {
 
   await updateUserById(newUser._id, { token });
 
+  const nweWater = await createWater({
+    owner: newUser._id,
+    dailyNorma: newUser.dailyNorma,
+  });
+  if (!nweWater) {
+    throw httpError(400);
+  }
+
   res.status(201).json({
     token,
     user: {
@@ -51,6 +59,7 @@ const register = async (req, res) => {
       avatar,
       gender: newUser.gender,
       dailyNorma: newUser.dailyNorma,
+      verificationToken,
     },
   });
 };
@@ -61,6 +70,10 @@ const login = async (req, res) => {
 
   if (!user) {
     throw httpError(401, "Email or password is wrong");
+  }
+
+  if (!user.verify) {
+    throw httpError(401, "Email not verified");
   }
 
   const comparePasswords = await user.comparePassword(password);
@@ -102,24 +115,15 @@ const logout = async (req, res) => {
 
 const verifyEmail = async (req, res) => {
   const { verificationToken } = req.params;
-  if (!verificationToken) {
-    throw httpError(
-      400,
-      "Verification token is missing in the request params."
-    );
-  }
-  const user = await verifyByToken(verificationToken);
-  if (!user) {
-    throw httpError(404);
-  }
-  await verifyEmailByToken(user._id, {
+  const user = await findUserByEmail({ verificationToken });
+  if (!user) throw httpError(404);
+
+  await findUserByIdAndUpdate(user._id, {
     verify: true,
     verificationToken: null,
   });
 
-  res.json({
-    message: "Verification successful",
-  });
+  res.redirect(`${FRONT_END}/agua_vivo_app/signin`);
 };
 
 const resendVerifyEmail = async (req, res) => {
@@ -147,45 +151,36 @@ const resendVerifyEmail = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
+
   const user = await findUserByEmail({ email });
+
+  if (!user) {
+    throw httpError(404);
+  }
+  console.log(user._id);
+  const newEmail = {
+    to: email,
+    subject: "Reset Password",
+    html: `<a target="_blank" href="${FRONT_END}/agua_vivo_app/reset-password/${user._id}">Reset Password</a>`,
+  };
+
+  await sendEmail(newEmail);
+  res.json({ message: "Email sent successfully" });
+};
+
+const resetPassword = async (req, res) => {
+  const { password, id } = req.body;
+
+  const user = await findUserById(id);
   if (!user) {
     throw httpError(404);
   }
 
-  const payload = {
-    id: user._id,
-  };
+  user.password = password;
+  await user.hashPassword();
+  await user.save();
 
-  const token = jwt.sign(payload, SECRET_KEY);
-
-  const newEmail = {
-    to: email,
-    subject: "Reset Password",
-    html: `<a target="_blank" href="http://localhost:5173/agua_vivo_app/reset-password/${user._id}/${token}">Reset Password</a>`,
-  };
-
-  await sendEmail(newEmail);
-
-  res.json({
-    message: "Reset password sent",
-  });
-};
-
-const resetPassword = async (req, res) => {
-  const { id, token } = req.params;
-  const { password } = req.body;
-
-  jwt.verify(token, SECRET_KEY, (error, decoded) => {
-    if (error) {
-      throw httpError(400, "token error");
-    } else {
-      bcrypt.hash(password, 10).then(async (hash) => {
-        await updateUserById({ _id: id }, { password: hash }).then(() =>
-          res.send("Success")
-        );
-      });
-    }
-  });
+  res.json({ message: "Password changed" });
 };
 
 module.exports = {

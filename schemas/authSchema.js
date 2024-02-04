@@ -34,10 +34,16 @@ const emailSchema = Joi.object({
     .messages({ "any.required": "missing required email field" }),
 });
 
+const resetPassword = Joi.object({
+  password: Joi.string().min(8).max(64).required(),
+  id: Joi.string().required(),
+});
+
 const schemas = {
   registerSchema,
   loginSchema,
   emailSchema,
+  resetPassword,
 };
 
 module.exports = { schemas };

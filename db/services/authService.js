@@ -15,23 +15,20 @@ const userCollection = (body, avatar, token) => {
   return user;
 };
 
-const verifyEmailByToken = async (id, { verify, verificationToken }) => {
-  const user = await User.findByIdAndUpdate(id, {
-    verify,
-    verificationToken,
-  });
+const findUserByIdAndUpdate = async (id, { verify, verificationToken }) => {
+  const user = await User.findByIdAndUpdate(id, { verify, verificationToken });
   return user;
 };
 
-const verifyByToken = async (verificationToken) => {
+const findVerificationToken = async ({ verificationToken }) => {
   const user = await User.findOne({ verificationToken });
   return user;
 };
 
 module.exports = {
+  findUserByIdAndUpdate,
   findUserByEmail,
   updateUserById,
   userCollection,
-  verifyEmailByToken,
-  verifyByToken,
+  findVerificationToken,
 };

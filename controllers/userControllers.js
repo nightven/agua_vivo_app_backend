@@ -1,6 +1,7 @@
 const { httpError, ctrlWrapper } = require("../helpers");
 
 const { findUserById, updateUserInfo } = require("../db/services/userServices");
+const { updateDailyNorma } = require("../db/services/waterServices");
 
 const updateAvatar = async (req, res) => {
   const { _id } = req.user;
@@ -41,23 +42,47 @@ const getInfo = async (req, res) => {
 
 const updateInfo = async (req, res) => {
   const { _id } = req.user;
-  const { password } = req.body;
-  const user = await updateUserInfo(_id, req.body, { new: true });
+  const { name, gender, password, newPassword } = req.body;
 
-  if (!user) {
-    throw httpError(404);
-  }
+  let updatedUser;
 
-  if (password) {
-    await user.hashPassword();
-    user.save();
+  if (password && newPassword) {
+    if (password === newPassword) {
+      throw httpError(401, "The new password cannot be equal to the old one");
+    }
+
+    const user = await findUserById(_id);
+    if (!user) {
+      throw httpError(404);
+    }
+
+    const comparePasswords = await user.comparePassword(password);
+    if (!comparePasswords) {
+      throw httpError(401, "Password is wrong");
+    }
+
+    updatedUser = await updateUserInfo(
+      _id,
+      { name, gender, password: newPassword },
+      { new: true }
+    );
+    console.log(updatedUser);
+
+    await updatedUser.hashPassword();
+    await updatedUser.save();
+    console.log(updatedUser);
+  } else {
+    updatedUser = await updateUserInfo(_id, { name, gender }, { new: true });
+    if (!updatedUser) {
+      throw httpError(404);
+    }
   }
 
   res.json({
     user: {
-      name: user.name,
-      email: user.email,
-      gender: user.gender,
+      name: updatedUser.name,
+      email: updatedUser.email,
+      gender: updatedUser.gender,
     },
   });
 };
@@ -73,6 +98,10 @@ const dailyNorm = async (req, res) => {
   const user = await updateUserInfo(_id, req.body, { new: true });
 
   if (!user) {
+    throw httpError(404);
+  }
+  const norma = await updateDailyNorma({ owner: _id, dailyNorma });
+  if (!norma) {
     throw httpError(404);
   }
 
