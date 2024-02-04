@@ -10,8 +10,9 @@ const { nanoid } = require("nanoid");
 const jwt = require("jsonwebtoken");
 const { createWater } = require("../db/services/waterServices");
 const { findUserById } = require("../db/services/userServices");
+const { messages } = require("../email/messages");
 
-const { SECRET_KEY, BACK_END, FRONT_END } = process.env;
+const { SECRET_KEY, FRONT_END } = process.env;
 
 const register = async (req, res) => {
   const { email } = req.body;
@@ -25,13 +26,7 @@ const register = async (req, res) => {
   const verificationToken = nanoid();
   const newUser = userCollection({ ...req.body, avatar, verificationToken });
 
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BACK_END}/auth/verify/${verificationToken}">Click verify email</a>`,
-  };
-
-  await sendEmail(verifyEmail);
+  await sendEmail(messages.registerMessage(email, newUser));
 
   await newUser.hashPassword();
   await newUser.save();
@@ -40,7 +35,7 @@ const register = async (req, res) => {
     id: newUser._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY);
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "5h" });
 
   await updateUserById(newUser._id, { token });
 
@@ -85,7 +80,7 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY);
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "5h" });
 
   await updateUserById(user._id, { token });
 
@@ -136,13 +131,7 @@ const resendVerifyEmail = async (req, res) => {
     throw httpError(400, "Verification has already been passed");
   }
 
-  const verifyEmail = {
-    to: email,
-    subject: "Verify email",
-    html: `<a target="_blank" href="${BACK_END}/auth/verify/${user.verificationToken}">Click verify email</a>`,
-  };
-
-  await sendEmail(verifyEmail);
+  await sendEmail(messages.registerMessage(email, user));
 
   res.json({
     message: "Verification email sent",
@@ -158,13 +147,8 @@ const forgotPassword = async (req, res) => {
     throw httpError(404);
   }
   console.log(user._id);
-  const newEmail = {
-    to: email,
-    subject: "Reset Password",
-    html: `<a target="_blank" href="${FRONT_END}/reset-password/${user._id}">Reset Password</a>`,
-  };
 
-  await sendEmail(newEmail);
+  await sendEmail(messages.resetMessage(email, user));
   res.json({ message: "Email sent successfully" });
 };
 
