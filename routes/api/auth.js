@@ -1,7 +1,7 @@
 const express = require("express");
 const validateBody = require("../../decorators/validateBody");
 const router = express.Router();
-const { authenticate } = require("../../middlewares");
+const { authenticate, isValidId } = require("../../middlewares");
 const { schemas } = require("../../schemas/authSchema");
 
 const controllers = require("../../controllers/authController");
@@ -33,7 +33,6 @@ router.post(
 router.patch(
   "/reset-password",
   validateBody(schemas.resetPassword),
-  authenticate,
   controllers.resetPassword
 );
 
