@@ -16,7 +16,8 @@ const {
   updateUserById,
   googleCollection,
 } = require("../db/services/googleServices");
-const { ctrlWrapper } = require("../helpers");
+const { ctrlWrapper, httpError } = require("../helpers");
+const { createWater } = require("../db/services/waterServices");
 
 const googleAuth = async (req, res) => {
   const paramsStr = queryString.stringify({
@@ -74,6 +75,10 @@ const googleRedirect = async (req, res) => {
       verify: true,
       password: DEFAULT_PASSWORD,
     });
+  }
+  const newWater = createWater({ owner: user._id, dailyNorma: 2 });
+  if (!newWater) {
+    throw httpError(404);
   }
 
   const payload = {
