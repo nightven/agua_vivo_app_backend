@@ -152,25 +152,27 @@ const resendVerifyEmail = async (req, res) => {
 
 const forgotPassword = async (req, res) => {
   const { email } = req.body;
+
   const user = await findUserByEmail({ email });
+
   if (!user) {
     throw httpError(404);
   }
-
+  console.log(user._id);
   const newEmail = {
     to: email,
     subject: "Reset Password",
-    html: `<a href="http://localhost:5173/agua_vivo_app/reset-password/${user.token}">Reset Password</a>`,
+    html: `<a target="_blank" href="http://localhost:5173/agua_vivo_app/reset-password/${user._id}">Reset Password</a>`,
   };
 
   await sendEmail(newEmail);
+  res.json({ message: "Email sent successfully" });
 };
 
 const resetPassword = async (req, res) => {
-  const { _id } = req.user;
-  const { password } = req.body;
+  const { password, id } = req.body;
 
-  const user = await findUserById(_id);
+  const user = await findUserById(id);
   if (!user) {
     throw httpError(404);
   }
@@ -179,7 +181,7 @@ const resetPassword = async (req, res) => {
   await user.hashPassword();
   await user.save();
 
-  res.redirect("http://localhost:5173/agua_vivo_app/signin");
+  res.json({ message: "Password changed" });
 };
 
 module.exports = {

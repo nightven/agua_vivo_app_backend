@@ -36,6 +36,7 @@ const emailSchema = Joi.object({
 
 const resetPassword = Joi.object({
   password: Joi.string().min(8).max(64).required(),
+  id: Joi.string().required(),
 });
 
 const schemas = {
