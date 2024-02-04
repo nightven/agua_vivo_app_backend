@@ -3,7 +3,6 @@ const {
   userCollection,
   updateUserById,
   findUserByIdAndUpdate,
-  updateUserPassword,
 } = require("../db/services/authService");
 const { httpError, sendEmail, ctrlWrapper } = require("../helpers");
 const gravatar = require("gravatar");
@@ -12,7 +11,7 @@ const jwt = require("jsonwebtoken");
 const { createWater } = require("../db/services/waterServices");
 const { findUserById } = require("../db/services/userServices");
 
-const { SECRET_KEY, BACK_END } = process.env;
+const { SECRET_KEY, BACK_END, FRONT_END } = process.env;
 
 const register = async (req, res) => {
   const { email } = req.body;
@@ -29,7 +28,7 @@ const register = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="http://localhost:8000/auth/verify/${verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BACK_END}/auth/verify/${verificationToken}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
@@ -124,7 +123,7 @@ const verifyEmail = async (req, res) => {
     verificationToken: null,
   });
 
-  res.redirect(`http://localhost:5173/agua_vivo_app/signin`);
+  res.redirect(`${FRONT_END}/agua_vivo_app/signin`);
 };
 
 const resendVerifyEmail = async (req, res) => {
@@ -140,7 +139,7 @@ const resendVerifyEmail = async (req, res) => {
   const verifyEmail = {
     to: email,
     subject: "Verify email",
-    html: `<a target="_blank" href="http://localhost:8000/auth/verify/${user.verificationToken}">Click verify email</a>`,
+    html: `<a target="_blank" href="${BACK_END}/auth/verify/${user.verificationToken}">Click verify email</a>`,
   };
 
   await sendEmail(verifyEmail);
@@ -162,7 +161,7 @@ const forgotPassword = async (req, res) => {
   const newEmail = {
     to: email,
     subject: "Reset Password",
-    html: `<a target="_blank" href="http://localhost:5173/agua_vivo_app/reset-password/${user._id}">Reset Password</a>`,
+    html: `<a target="_blank" href="${FRONT_END}/agua_vivo_app/reset-password/${user._id}">Reset Password</a>`,
   };
 
   await sendEmail(newEmail);

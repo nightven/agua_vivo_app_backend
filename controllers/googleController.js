@@ -21,7 +21,7 @@ const { ctrlWrapper } = require("../helpers");
 const googleAuth = async (req, res) => {
   const paramsStr = queryString.stringify({
     client_id: GOOGLE_CLIENT_ID,
-    redirect_uri: `http://localhost:8000/google/google-redirect`,
+    redirect_uri: `${BACK_END}/google/google-redirect`,
     scope: [
       "https://www.googleapis.com/auth/userinfo.email",
       "https://www.googleapis.com/auth/userinfo.profile",
@@ -48,7 +48,7 @@ const googleRedirect = async (req, res) => {
     data: {
       client_id: GOOGLE_CLIENT_ID,
       client_secret: GOOGLE_CLIENT_SECRET,
-      redirect_uri: `http://localhost:8000/google/google-redirect`,
+      redirect_uri: `${BACK_END}/google/google-redirect`,
       grant_type: "authorization_code",
       code,
     },
@@ -85,7 +85,7 @@ const googleRedirect = async (req, res) => {
   await updateUserById(user._id, { token });
 
   // Замість /google посилання на майбутній ендпоінт на фронтенді
-  res.redirect(`http://localhost:5173/agua_vivo_app/google?token=${token}`);
+  res.redirect(`${FRONT_END}/agua_vivo_app/google?token=${token}`);
 };
 
 module.exports = {
