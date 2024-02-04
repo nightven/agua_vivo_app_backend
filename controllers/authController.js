@@ -123,7 +123,7 @@ const verifyEmail = async (req, res) => {
     verificationToken: null,
   });
 
-  res.redirect(`${FR}/agua_vivo_app/signin`);
+  res.redirect(`${FRONT_END}/agua_vivo_app/signin`);
 };
 
 const resendVerifyEmail = async (req, res) => {
