@@ -94,8 +94,6 @@ const getMonthly = async (req, res) => {
   const { _id: owner } = req.user;
   const { date } = req.params;
 
-  console.log(date);
-
   const amountOfMonth = await getEntriesMonthly({ owner, date });
 
   if (!amountOfMonth.length) {

@@ -1,7 +1,7 @@
 {
   "openapi": "3.0.1",
   "info": {
-    "version": "2.0.0",
+    "version": "3.0.0",
     "title": "Water Tracker paths",
     "description": "Showing off swagger-ui-express",
     "license": {
@@ -22,7 +22,6 @@
       "description": "Authorization endpoints"
     },
     { "name": "User", "description": "User endpoints" },
-    { "name": "Google Auth", "description": "Google authorization endpoints" },
     {
       "name": "Water",
       "description": "Water endpoints"
@@ -121,9 +120,7 @@
       "get": {
         "tags": ["Auth"],
         "summary": "User current",
-        "parameters": [
-
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
@@ -152,8 +149,7 @@
       "post": {
         "tags": ["Auth"],
         "summary": "User logout",
-        "parameters": [
-        ],
+        "parameters": [],
 
         "security": [{ "Bearer": [] }],
 
@@ -173,12 +169,101 @@
         }
       }
     },
+    "/auth/forgot-password": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Forgot password",
+        "parameters": [],
+        "requestBody": {
+          "description": "Enter email address",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ForgotPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Email sent successfully"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/auth/reset-password": {
+      "patch": {
+        "tags": ["Auth"],
+        "summary": "Reset password",
+        "parameters": [],
+        "requestBody": {
+          "description": "Enter old and new passwords",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendPasswordRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Password changed"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
+    "/auth/verify": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Resent verify email",
+        "parameters": [],
+        "requestBody": {
+          "description": "Resent verify email",
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ResendVerifyEmailRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verification email sent"
+          },
+          "400": {
+            "description": "Verification has already been passed"
+          },
+          "404": {
+            "description": "Email not found"
+          },
+          "500": {
+            "description": "Server error"
+          }
+        }
+      }
+    },
     "/users/info/": {
       "get": {
         "tags": ["User"],
         "summary": "User Information",
-        "parameters": [
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
@@ -210,8 +295,7 @@
       "patch": {
         "tags": ["User"],
         "summary": "User update",
-        "parameters": [
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Users's fields update",
@@ -254,8 +338,7 @@
       "patch": {
         "tags": ["User"],
         "summary": "Avatar update",
-        "parameters": [
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "required": true,
@@ -304,8 +387,7 @@
       "patch": {
         "tags": ["User"],
         "summary": "Daily norma update",
-        "parameters": [
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Update water rate",
@@ -349,8 +431,7 @@
       "post": {
         "tags": ["Water"],
         "summary": "Add water",
-        "parameters": [
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Add one portion of the water",
@@ -394,8 +475,7 @@
       "put": {
         "tags": ["Water"],
         "summary": "Update water",
-        "parameters": [
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
         "requestBody": {
           "description": "Update one portion of the water",
@@ -440,8 +520,7 @@
         "tags": ["Water"],
         "summary": "Delete water",
         "parameters": [
-     
-{
+          {
             "in": "path",
             "name": "waterId",
             "required": "true",
@@ -460,7 +539,8 @@
                   "$ref": "#/components/schemas/DeleteWaterResponse"
                 }
               }
-            }          },
+            }
+          },
 
           "400": {
             "description": "Bed request"
@@ -481,8 +561,7 @@
       "get": {
         "tags": ["Water"],
         "summary": "Get water",
-        "parameters": [
-        ],
+        "parameters": [],
         "security": [{ "Bearer": [] }],
         "responses": {
           "200": {
@@ -516,8 +595,7 @@
         "tags": ["Water"],
         "summary": "Get water",
         "parameters": [
-          
-{
+          {
             "in": "path",
             "name": "date",
             "required": "true",
@@ -613,6 +691,11 @@
                 "type": "number",
                 "description": "User's daily norma",
                 "example": 2
+              },
+              "verificationToken": {
+                "type": "string",
+                "description": "User's verify token",
+                "example": "YPpf4-tWjgmva0nQsBvU2"
               }
             }
           }
@@ -723,6 +806,46 @@
           }
         }
       },
+      "ForgotPasswordRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "description": "User's email",
+            "format": "email",
+            "example": "user@example.com"
+          }
+        }
+      },
+      "ResendPasswordRequest": {
+        "type": "object",
+        "required": ["password", "id"],
+        "properties": {
+          "password": {
+            "type": "string",
+            "description": "User's new password",
+            "example": "12345678Aa"
+          },
+          "id": {
+            "type": "string",
+            "description": "User's id",
+            "example": "12345678A65bfb3396be6664a5ab19be6a"
+          }
+        }
+      },
+      "ResendVerifyEmailRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": {
+          "email": {
+            "type": "string",
+            "format": "email",
+            "description": "User's email",
+            "example": "example@example.com"
+          }
+        }
+      },
       "GetInfoResponse": {
         "type": "object",
         "properties": {
@@ -775,13 +898,13 @@
           },
           "password": {
             "type": "string",
-            "description": "User's new password",
+            "description": "User's old password",
             "example": "12345678Aa"
           },
-          "avatar": {
+          "newPassword": {
             "type": "string",
-            "description": "URL or path to user's avatar",
-            "example": "https://res.cloudinary.com/dytpmznz8/image/upload/v1706448821/avatars/65b423e86e2f1f84365454da.jpg"
+            "description": "User's new password",
+            "example": "12345678Bb"
           },
           "gender": {
             "type": "string",
@@ -803,11 +926,6 @@
             "format": "email",
             "description": "User's email address",
             "example": "example@example.com"
-          },
-          "avatar": {
-            "type": "string",
-            "description": "URL or path to user's avatar",
-            "example": "https://res.cloudinary.com/dytpmznz8/image/upload/v1706448821/avatars/65b423e86e2f1f84365454da.jpg"
           },
           "gender": {
             "type": "string",
