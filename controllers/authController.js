@@ -123,7 +123,7 @@ const verifyEmail = async (req, res) => {
     verificationToken: null,
   });
 
-  res.redirect(`${FR}/agua_vivo_app/signin`);
+  res.redirect(`${FRONT_END}/signin`);
 };
 
 const resendVerifyEmail = async (req, res) => {
@@ -161,7 +161,7 @@ const forgotPassword = async (req, res) => {
   const newEmail = {
     to: email,
     subject: "Reset Password",
-    html: `<a target="_blank" href="${FRONT_END}/agua_vivo_app/reset-password/${user._id}">Reset Password</a>`,
+    html: `<a target="_blank" href="${FRONT_END}/reset-password/${user._id}">Reset Password</a>`,
   };
 
   await sendEmail(newEmail);
