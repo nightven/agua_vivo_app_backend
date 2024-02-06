@@ -1,4 +1,4 @@
-const { CloudinaryStorage } = require("multer-storage-cloudinary");
+
 const { amountMonthly, httpError } = require("../../helpers");
 const User = require("../models/userModel");
 const Water = require("../models/waterModel");
@@ -79,22 +79,21 @@ const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
 };
 
 const deleteAmountWater = async ({ waterId, owner }) => {
+  const date = new Date();
+
   const waterVolume = await getWaterVolume(waterId);
-  console.log("Owner:", owner);
-  console.log("WaterId:", waterId);
-  console.log("waterVolume:", waterVolume);
 
   const deletedAmount = await Water.findOneAndUpdate(
-    { owner },
+    {date: {
+      $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+    },
+    owner},
     {
       $inc: { totalVolume: -waterVolume },
       $pull: { entries: { _id: waterId } },
     },
     { new: true }
   );
-
-  console.log("deletedAmount:", deletedAmount);
-
   return deletedAmount;
 };
 
@@ -157,7 +156,6 @@ const getEntriesMonthly = async ({ owner, date }) => {
     date: { $gte: startDate, $lte: endDate },
     owner,
   });
-  console.log(waterOfMonth);
 
   const monthlyWater = amountMonthly(waterOfMonth);
   return monthlyWater;
