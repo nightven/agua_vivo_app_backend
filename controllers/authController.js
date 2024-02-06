@@ -35,7 +35,7 @@ const register = async (req, res) => {
     id: newUser._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "5h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "48h" });
 
   await updateUserById(newUser._id, { token });
 
@@ -80,7 +80,7 @@ const login = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "5h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "48h" });
 
   await updateUserById(user._id, { token });
 

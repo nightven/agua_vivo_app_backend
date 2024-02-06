@@ -85,11 +85,10 @@ const googleRedirect = async (req, res) => {
     id: user._id,
   };
 
-  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "5h" });
+  const token = jwt.sign(payload, SECRET_KEY, { expiresIn: "48h" });
 
   await updateUserById(user._id, { token });
 
-  // Замість /google посилання на майбутній ендпоінт на фронтенді
   res.redirect(`${FRONT_END}/google?token=${token}`);
 };
 
