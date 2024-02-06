@@ -604,17 +604,7 @@
           }
         ],
         "security": [{ "Bearer": [] }],
-        "requestBody": {
-          "description": "Get all water portions for the month",
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MonthlyWaterRequest"
-              }
-            }
-          }
-        },
+        
         "responses": {
           "204": {
             "description": "Successful operation",
@@ -1084,17 +1074,6 @@
                 }
               }
             }
-          }
-        }
-      },
-      "MonthlyWaterRequest": {
-        "type": "object",
-        "required": ["date"],
-        "properties": {
-          "date": {
-            "type": "string",
-            "description": "Date of water intake",
-            "example": "2024-01"
           }
         }
       },
