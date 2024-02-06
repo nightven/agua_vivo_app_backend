@@ -1,9 +1,7 @@
 const { Schema, model } = require("mongoose");
 
 const handleMongooseError = require("../../helpers/handleMongooseError");
-
-const timeRegexp = /^(\d{1,2}):(\d{1,2})\s(AM|PM)$/;
-const dateRegex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z$/;
+const { regexSchemas } = require("../public/regex");
 
 const entriesSchema = new Schema({
   waterVolume: {
@@ -12,7 +10,7 @@ const entriesSchema = new Schema({
   },
   time: {
     type: String,
-    match: timeRegexp,
+    match: regexSchemas.timeRegexp,
     required: [true, "Time is required"],
   },
 });
@@ -21,7 +19,7 @@ const waterSchema = new Schema(
   {
     date: {
       type: Date,
-      match: dateRegex,
+      match: regexSchemas.dateRegex,
       required: [true, "date is required"],
     },
     dailyNorma: {

@@ -1,11 +1,11 @@
 const Joi = require("joi");
-const emailRegExp = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const { regexSchemas } = require("../db/public/regex");
 
 const registerSchema = Joi.object({
   email: Joi.string()
     .email()
     .required()
-    .pattern(emailRegExp)
+    .pattern(regexSchemas.emailRegExp)
     .messages({ "any.required": "missing required email field" }),
   password: Joi.string()
     .required()
@@ -17,7 +17,7 @@ const registerSchema = Joi.object({
 const loginSchema = Joi.object({
   email: Joi.string()
     .email()
-    .pattern(emailRegExp)
+    .pattern(regexSchemas.emailRegExp)
     .required()
     .messages({ "any.required": "missing required email field" }),
   password: Joi.string()
