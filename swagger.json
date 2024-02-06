@@ -606,7 +606,7 @@
         "security": [{ "Bearer": [] }],
         
         "responses": {
-          "204": {
+          "200": {
             "description": "Successful operation",
             "content": {
               "application/json": {
