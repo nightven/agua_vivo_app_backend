@@ -79,10 +79,15 @@ const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
 };
 
 const deleteAmountWater = async ({ waterId, owner }) => {
+  const date = new Date();
+
   const waterVolume = await getWaterVolume(waterId);
 
   const deletedAmount = await Water.findOneAndUpdate(
-    { owner },
+    {date: {
+      $gte: new Date(date.getFullYear(), date.getMonth(), date.getDate()),
+    },
+    owner},
     {
       $inc: { totalVolume: -waterVolume },
       $pull: { entries: { _id: waterId } },
