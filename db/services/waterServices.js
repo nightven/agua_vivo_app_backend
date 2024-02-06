@@ -80,9 +80,6 @@ const updateAmountWater = async ({ owner, id, waterVolume, time }) => {
 
 const deleteAmountWater = async ({ waterId, owner }) => {
   const waterVolume = await getWaterVolume(waterId);
-  console.log("Owner:", owner);
-  console.log("WaterId:", waterId);
-  console.log("waterVolume:", waterVolume);
 
   const deletedAmount = await Water.findOneAndUpdate(
     { owner },
@@ -92,9 +89,6 @@ const deleteAmountWater = async ({ waterId, owner }) => {
     },
     { new: true }
   );
-
-  console.log("deletedAmount:", deletedAmount);
-
   return deletedAmount;
 };
 
@@ -157,7 +151,6 @@ const getEntriesMonthly = async ({ owner, date }) => {
     date: { $gte: startDate, $lte: endDate },
     owner,
   });
-  console.log(waterOfMonth);
 
   const monthlyWater = amountMonthly(waterOfMonth);
   return monthlyWater;
