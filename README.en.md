@@ -4,13 +4,24 @@ This repository contains the backend of the Agua Vivo application developed for 
 
 ## Requirements for the environment
 
-| **Node.js**      | **Express.js**   | **dotenv**             |
-| ---------------- | ---------------- | ---------------------- |
-| **cors**         | **MongoDB**      | **Mongoose**           |
-| **SendGrid**     | **Axios**        | **bcrypt**             |
-| **cloudinary**   | **gravatar**     | **nanoid**             |
-| **Joi**          | **Jsonwebtoken** | **Morgan**             |
-| **query-string** | **Multer**       | **swagger-ui-express** |
+- **Node.js**
+- **Express.js**
+- **dotenv**
+- **cors**
+- **MongoDB**
+- **Mongoose**
+- **SendGrid**
+- **Axios**
+- **bcrypt**
+- **cloudinary**
+- **gravatar**
+- **nanoid**
+- **Joi**
+- **Jsonwebtoken**
+- **Morgan**
+- **query-string**
+- **Multer**
+- **swagger-ui-express**
 
 ## Installation instructions
 
