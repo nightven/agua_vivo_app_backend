@@ -4,12 +4,13 @@ This repository contains the backend of the Agua Vivo application developed for 
 
 ## Requirements for the environment
 
-| **Node.js** | **Express.js** | **dotenv** |
-| **cors** | **MongoDB** | **Mongoose** |
-| **SendGrid** | **Axios** | **bcrypt** |
-| **cloudinary** | **gravatar** | **nanoid** |
-| **Joi** | **Jsonwebtoken** | **Morgan** |
-| **query-string** | **Multer** | **swagger-ui-express** |
+| **Node.js**      | **Express.js**   | **dotenv**             |
+| ---------------- | ---------------- | ---------------------- |
+| **cors**         | **MongoDB**      | **Mongoose**           |
+| **SendGrid**     | **Axios**        | **bcrypt**             |
+| **cloudinary**   | **gravatar**     | **nanoid**             |
+| **Joi**          | **Jsonwebtoken** | **Morgan**             |
+| **query-string** | **Multer**       | **swagger-ui-express** |
 
 ## Installation instructions
 
@@ -90,10 +91,6 @@ An appropriate route for all water-related operations. Its functions include:
 | [![Beiar Vitalii](./images/vitalii.jpg)](https://github.com/nightven) [![GitHub](https://www.vectorlogo.zone/logos/github/github-icon.svg)](https://github.com/nightven) [![LinkedIn](https://www.vectorlogo.zone/logos/linkedin/linkedin-icon.svg)](https://www.linkedin.com/in/vitaliybeyar/) | [![Karpova Sofiia](./images/sofiia.jpg)](https://github.com/sofiialives) [![GitHub](https://www.vectorlogo.zone/logos/github/github-icon.svg)](https://github.com/sofiialives) [![LinkedIn](https://www.vectorlogo.zone/logos/linkedin/linkedin-icon.svg)](https://www.linkedin.com/in/sofiiakarpova/) | [![Ibraimov Server](./images/server.jpg)](https://github.com/ServerIbraimovUa) [![GitHub](https://www.vectorlogo.zone/logos/github/github-icon.svg)](https://github.com/ServerIbraimovUa) [![LinkedIn](https://www.vectorlogo.zone/logos/linkedin/linkedin-icon.svg)](https://www.linkedin.com/in/serveribraimov/) |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Beiar Vitalii** - Route Water, Swagger Documentation                                                                                                                                                                                                                                          | **Karpova Sofiia** - Route Auth, User, Google                                                                                                                                                                                                                                                          | **Ibraimov Server** - Swagger Documentation                                                                                                                                                                                                                                                                        |
-
-## Contribution
-
-If you would like to contribute to this project, please see the file [CONTRIBUTING.md](CONTRIBUTING.md) for information. 😊
 
 ## License
 
