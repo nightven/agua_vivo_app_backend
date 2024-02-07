@@ -4,13 +4,12 @@
 
 ## Вимоги до середовища
 
-| **Node.js**      | **Express.js**   | **dotenv**             |
-| ---------------- | ---------------- | ---------------------- |
-| **cors**         | **MongoDB**      | **Mongoose**           |
-| **SendGrid**     | **Axios**        | **bcrypt**             |
-| **cloudinary**   | **gravatar**     | **nanoid**             |
-| **Joi**          | **Jsonwebtoken** | **Morgan**             |
-| **query-string** | **Multer**       | **swagger-ui-express** |
+| **Node.js** | **Express.js** | **dotenv** |
+| **cors** | **MongoDB** | **Mongoose** |
+| **SendGrid** | **Axios** | **bcrypt** |
+| **cloudinary** | **gravatar** | **nanoid** |
+| **Joi** | **Jsonwebtoken** | **Morgan** |
+| **query-string** | **Multer** | **swagger-ui-express** |
 
 ## Інструкції з встановлення
 
@@ -91,8 +90,7 @@ npm run dev
 | [![Беяр Віталій](./images/vitalii.jpg)](https://github.com/nightven) [![GitHub](https://www.vectorlogo.zone/logos/github/github-icon.svg)](https://github.com/nightven) [![LinkedIn](https://www.vectorlogo.zone/logos/linkedin/linkedin-icon.svg)](https://www.linkedin.com/in/vitaliybeyar/) | [![Карпова Софія](./images/sofiia.jpg)](https://github.com/sofiialives) [![GitHub](https://www.vectorlogo.zone/logos/github/github-icon.svg)](https://github.com/sofiialives) [![LinkedIn](https://www.vectorlogo.zone/logos/linkedin/linkedin-icon.svg)](https://www.linkedin.com/in/sofiiakarpova/) | [![Ібраімов Сервер](./images/server.jpg)](https://github.com/ServerIbraimovUa) [![GitHub](https://www.vectorlogo.zone/logos/github/github-icon.svg)](https://github.com/ServerIbraimovUa) [![LinkedIn](https://www.vectorlogo.zone/logos/linkedin/linkedin-icon.svg)](https://www.linkedin.com/in/serveribraimov/) |
 | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | **Беяр Віталій** - Роут Water, Swagger Documentation                                                                                                                                                                                                                                           | **Карпова Софія** - Роут Auth, User, Google                                                                                                                                                                                                                                                           | **Ібраімов Сервер** - Swagger Documentation                                                                                                                                                                                                                                                                        |
-|                                                                                                                                                                                                                                                                                                |
-
+|                                                                                                
 ## Ліцензія
 
 Цей проєкт ліцензований під MIT Ліцензією - подробиці дивіться у файлі [LICENSE](LICENSE). 📄
