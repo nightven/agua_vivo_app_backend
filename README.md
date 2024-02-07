@@ -1,33 +1,15 @@
-# Agua Vivo App Backend
-
-| [![Beiar Vitalii](./images/vitalii.jpg)](#)           | [![Karpova Sofiia](./images/sofia.jpg)](#)   | [![Ibraimov Server](./images/server.jpg)](#) |
-| ----------------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| **Beiar Vitalii** - Роут Water, Swagger Documentation | **Karpova Sofiia** - Роут Auth, User, Google | **Ibraimov Server** - Swagger Documentation  |
-
 ## Опис проєкту
 
-Цей репозиторій містить бекенд частину додатку Agua Vivo, розробленого для [Agua Vivo App](https://github.com/nightven/agua_vivo_app_backend).
+Цей репозиторій містить бекенд частину додатку Agua Vivo, розробленого для [Agua Vivo App](https://serveribraimovua.github.io/agua_vivo_app/) (GitHub: [Frontend](https://github.com/ServerIbraimovUa/agua_vivo_app))
 
 ## Вимоги до середовища
 
-- Node.js
-- Express.js
-- dotenv
-- cors
-- MongoDB
-- Mongoose
-- SendGrid
-- Axios
-- bcrypt
-- cloudinary
-- gravatar
-- nanoid
-- Joi
-- Jsonwebtoken
-- Morgan
-- query-string
-- Multer
-- swagger-ui-express
+| **Node.js** | **Express.js** | **dotenv** |
+| **cors** | **MongoDB** | **Mongoose** |
+| **SendGrid** | **Axios** | **bcrypt** |
+| **cloudinary** | **gravatar** | **nanoid** |
+| **Joi** | **Jsonwebtoken** | **Morgan** |
+| **query-string** | **Multer** | **swagger-ui-express** |
 
 ## Інструкції з встановлення
 
@@ -103,10 +85,17 @@ npm run dev
 
   ![Water](./images/water.png)
 
+# Розробники
+
+| [![Беяр Віталій](./images/vitalii.jpg)](https://github.com/nightven) [![GitHub](https://www.vectorlogo.zone/logos/github/github-icon.svg)](https://github.com/nightven) [![LinkedIn](https://www.vectorlogo.zone/logos/linkedin/linkedin-icon.svg)](https://www.linkedin.com/in/vitaliybeyar/) | [![Карпова Софія](./images/sofiia.jpg)](https://github.com/sofiialives) [![GitHub](https://www.vectorlogo.zone/logos/github/github-icon.svg)](https://github.com/sofiialives) [![LinkedIn](https://www.vectorlogo.zone/logos/linkedin/linkedin-icon.svg)](https://www.linkedin.com/in/sofiiakarpova/) | [![Ібраімов Сервер](./images/server.jpg)](https://github.com/ServerIbraimovUa) [![GitHub](https://www.vectorlogo.zone/logos/github/github-icon.svg)](https://github.com/ServerIbraimovUa) [![LinkedIn](https://www.vectorlogo.zone/logos/linkedin/linkedin-icon.svg)](https://www.linkedin.com/in/serveribraimov/) |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Беяр Віталій** - Роут Water, Swagger Documentation                                                                                                                                                                                                                                           | **Карпова Софія** - Роут Auth, User, Google                                                                                                                                                                                                                                                           | **Ібраімов Сервер** - Swagger Documentation                                                                                                                                                                                                                                                                        |
+|                                                                                                                                                                                                                                                                                                |
+
 ## Внесок
 
-Якщо ви хочете внести свій внесок у цей проєкт, будь ласка, дивіться файл CONTRIBUTING.md для отримання відомостей.
+Якщо ви хочете внести свій внесок у цей проєкт, будь ласка, дивіться файл [CONTRIBUTING.md](CONTRIBUTING.md) для отримання відомостей. 😊
 
 ## Ліцензія
 
-Цей проєкт ліцензований під MIT Ліцензією - подробиці дивіться у файлі LICENSE.
+Цей проєкт ліцензований під MIT Ліцензією - подробиці дивіться у файлі [LICENSE](LICENSE). 📄
