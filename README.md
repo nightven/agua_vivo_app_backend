@@ -4,13 +4,24 @@
 
 ## Вимоги до середовища
 
-| **Node.js**      | **Express.js**   | **dotenv**             |
-| ---------------- | ---------------- | ---------------------- |
-| **cors**         | **MongoDB**      | **Mongoose**           |
-| **SendGrid**     | **Axios**        | **bcrypt**             |
-| **cloudinary**   | **gravatar**     | **nanoid**             |
-| **Joi**          | **Jsonwebtoken** | **Morgan**             |
-| **query-string** | **Multer**       | **swagger-ui-express** |
+- **Node.js**
+- **Express.js**
+- **dotenv**
+- **cors**
+- **MongoDB**
+- **Mongoose**
+- **SendGrid**
+- **Axios**
+- **bcrypt**
+- **cloudinary**
+- **gravatar**
+- **nanoid**
+- **Joi**
+- **Jsonwebtoken**
+- **Morgan**
+- **query-string**
+- **Multer**
+- **swagger-ui-express**
 
 ## Інструкції з встановлення
 
