@@ -87,9 +87,9 @@ npm run dev
 
 # Розробники
 
-| [![Beiar Vitalii](./images/vitalii.jpg)](#)           | [![Karpova Sofiia](./images/sofiia.jpg)](#)  | [![Ibraimov Server](./images/server.jpg)](#) |
-| ----------------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| **Beiar Vitalii** - Роут Water, Swagger Documentation | **Karpova Sofiia** - Роут Auth, User, Google | **Ibraimov Server** - Swagger Documentation  |
+| [![Беяр Віталій](./images/vitalii.jpg)](#)           | [![Карпова Софія](./images/sofiia.jpg)](#)  | [![Ібраімов Сервер](./images/server.jpg)](#) |
+| ---------------------------------------------------- | ------------------------------------------- | -------------------------------------------- |
+| **Беяр Віталій** - Роут Water, Swagger Documentation | **Карпова Софія** - Роут Auth, User, Google | **Ібраімов Сервер** - Swagger Documentation  |
 
 ## Внесок
 
