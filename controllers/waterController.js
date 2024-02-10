@@ -4,68 +4,94 @@ const {
   deleteAmountWater,
   getEntriesDaily,
   getEntriesMonthly,
-  findOneWater,
+  findWaterByDate,
+  getDailyNorma,
+  createWater,
 } = require("../db/services/waterServices");
-const { ctrlWrapper, httpError } = require("../helpers");
+const { ctrlWrapper, httpError, amountMonthly } = require("../helpers");
 
 const addWater = async (req, res) => {
   const { waterVolume } = req.body;
   const { _id: owner } = req.user;
- 
+  const date = new Date();
+  let newWater = null;
 
   if (waterVolume > 5000) {
     throw httpError(400, "waterVolume cannot exceed 5000");
   }
 
-  const amountWater = await addAmountWater(req.body, owner);
+  const dailyNorma = await getDailyNorma(owner);
+
+  newWater = await findWaterByDate({ owner, date });
+
+  if (!newWater) {
+    newWater = await createWater({ owner, dailyNorma, date });
+  }
+
+  const amountWater = await addAmountWater({
+    body: req.body,
+    owner,
+    waterId: newWater._id,
+  });
 
   if (!amountWater) {
     throw httpError(404);
   }
 
-  res.status(200).json({
-    _id: amountWater.id,
-    waterVolume: amountWater.waterVolume,
-    time: amountWater.time,
-  });
+  res.status(200).json(amountWater);
 };
 
 const updateWater = async (req, res) => {
-  const { id, waterVolume, time } = req.body;
+  const {id,  waterVolume } = req.body;
   const { _id: owner } = req.user;
+  const date = new Date();
 
   if (waterVolume > 5000) {
     throw httpError(400, "waterVolume cannot exceed 5000");
   }
 
+  const water = await findWaterByDate({ owner, date });
+
+  if (!water) {
+    throw httpError(404);
+  }
+
+  const oldWaterVolume = water.entries.find(
+    (entry) => entry._id.toString() === id
+  ).waterVolume;
+
   const updatedWater = await updateAmountWater({
     owner,
-    id,
-    waterVolume,
-    time,
+    body: req.body,
+    oldWaterVolume,
   });
 
   if (!updatedWater) {
     throw httpError(404);
   }
 
-  res.json({
-    _id: updatedWater.id,
-    waterVolume: updatedWater.waterVolume,
-    time: updatedWater.time,
-  });
+  const updatedEntry = updatedWater.entries.find(
+    (entry) => entry._id.toString() === id
+  );
+
+  res.json(updatedEntry);
+
 };
 
 const deleteWater = async (req, res) => {
   const { _id: owner } = req.user;
   const { waterId } = req.params;
-  const water = await findOneWater(waterId);
+  const date = new Date();
+
+  const water = await findWaterByDate({owner, date});
 
   if (!water) {
     throw httpError(404);
   }
 
-  const deletedWater = await deleteAmountWater({ waterId, owner });
+  const { waterVolume } = water.entries.find((water) => water.id === waterId);
+  
+  const deletedWater = await deleteAmountWater({ waterId, owner, waterVolume, date });
 
   if (!deletedWater) {
     throw httpError(404);
@@ -76,16 +102,19 @@ const deleteWater = async (req, res) => {
 
 const getToDay = async (req, res) => {
   const { _id: owner } = req.user;
+   const date = new Date();
 
-  const dailyWater = await getEntriesDaily(owner);
+  const dailyWater = await getEntriesDaily({owner, date});
 
   if (!dailyWater) {
     throw httpError(404);
   }
 
   res.json({
-    amountOfWater: dailyWater.amountOfWater,
-    percentage: Math.floor(dailyWater.percentage),
+    amountOfWater: dailyWater.entries.length,
+    percentage: Math.floor(
+      (dailyWater.totalVolume / (dailyWater.dailyNorma * 1000)) * 100
+    ),
     entries: dailyWater.entries,
   });
 };
@@ -93,14 +122,19 @@ const getToDay = async (req, res) => {
 const getMonthly = async (req, res) => {
   const { _id: owner } = req.user;
   const { date } = req.params;
+  const [year, month] = date.split("-");
+  const startDate = new Date(Date.UTC(year, month - 1, 1));
+  const endDate = new Date(Date.UTC(year, month, 0));
 
-  const amountOfMonth = await getEntriesMonthly({ owner, date });
+  const waterOfMonth = await getEntriesMonthly({ owner, startDate, endDate });
 
-  if (!amountOfMonth.length) {
+  const monthlyWater = amountMonthly(waterOfMonth);
+
+  if (!monthlyWater.length) {
     throw httpError(404);
   }
 
-  res.json({ month: amountOfMonth });
+  res.json({ month: monthlyWater });
 };
 
 module.exports = {
