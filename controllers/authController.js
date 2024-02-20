@@ -17,6 +17,7 @@ const { SECRET_KEY, FRONT_END } = process.env;
 const register = async (req, res) => {
   const { email } = req.body;
   const user = await findUserByEmail({ email });
+  const date = new Date();
 
   if (user) {
     throw httpError(409, "Email in use");
@@ -42,6 +43,7 @@ const register = async (req, res) => {
   const nweWater = await createWater({
     owner: newUser._id,
     dailyNorma: newUser.dailyNorma,
+    date,
   });
   if (!nweWater) {
     throw httpError(400);
