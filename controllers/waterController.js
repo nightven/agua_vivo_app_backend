@@ -107,7 +107,7 @@ const getToDay = async (req, res) => {
   const dailyWater = await getEntriesDaily({owner, date});
 
   if (!dailyWater) {
-    throw httpError(404);
+    res.json([])
   }
 
   res.json({
